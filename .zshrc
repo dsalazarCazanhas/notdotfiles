@@ -148,9 +148,6 @@ fi
 
 ### ALIASES ###
 
-#proxy
-alias internet='sudo cntlm -f -v -c /usr/share/cntlm/open.conf'
-
 #list
 alias ls='lsd --color=auto'
 alias la='lsd -a --group-directories-first'
@@ -214,26 +211,12 @@ alias wget="wget -c"
 #userlist
 alias userlist="cut -d: -f1 /etc/passwd | sort"
 
-#merge new settings
-alias merge="xrdb -merge ~/.Xresources"
-
-# Aliases for software managment
-# pacman
-alias pacman="sudo pacman --color auto"
-alias update="sudo pacman -Syyu"
-
-# paru as aur helper - updates everything
-alias pksyua="paru -Syu --noconfirm"
-alias upall="paru -Syu --noconfirm"
-
 #ps
 alias psa="ps auxf"
 alias psgrep="ps aux | grep -v grep | grep -i -e VSZ -e"
 
 #grub update
 alias update-grub="sudo grub-mkconfig -o /boot/grub/grub.cfg"
-#grub issue 08/2022
-alias install-grub-efi="sudo grub-install --target=x86_64-efi --efi-directory=/boot/efi"
 
 #add new fonts
 alias update-fc='sudo fc-cache -fv'
@@ -244,71 +227,17 @@ alias update-fc='sudo fc-cache -fv'
 #backup contents of /etc/skel to hidden backup folder in home/user
 alias bupskel='cp -Rf /etc/skel ~/.skel-backup-$(date +%Y.%m.%d-%H.%M.%S)'
 
-#copy shell configs
-alias cb='cp /etc/skel/.bashrc ~/.bashrc && echo "Copied."'
-alias cz='cp /etc/skel/.zshrc ~/.zshrc && exec zsh'
-alias cf='cp /etc/skel/.config/fish/config.fish ~/.config/fish/config.fish && echo "Copied."'
-
-#switch between bash and zsh
-alias tobash="sudo chsh $USER -s /bin/bash && echo 'Now log out.'"
-alias tozsh="sudo chsh $USER -s /bin/zsh && echo 'Now log out.'"
-alias tofish="sudo chsh $USER -s /bin/fish && echo 'Now log out.'"
-
-#switch between lightdm and sddm
-alias tolightdm="sudo pacman -S lightdm lightdm-gtk-greeter lightdm-gtk-greeter-settings --noconfirm --needed ; sudo systemctl enable lightdm.service -f ; echo 'Lightm is active - reboot now'"
-alias tosddm="sudo pacman -S sddm --noconfirm --needed ; sudo systemctl enable sddm.service -f ; echo 'Sddm is active - reboot now'"
-alias toly="sudo pacman -S ly --noconfirm --needed ; sudo systemctl enable ly.service -f ; echo 'Ly is active - reboot now'"
-alias togdm="sudo pacman -S gdm --noconfirm --needed ; sudo systemctl enable gdm.service -f ; echo 'Gdm is active - reboot now'"
-alias tolxdm="sudo pacman -S lxdm --noconfirm --needed ; sudo systemctl enable lxdm.service -f ; echo 'Lxdm is active - reboot now'"
-
-# kill commands
-# quickly kill conkies
-alias kc='killall conky'
-# quickly kill polybar
-alias kp='killall polybar'
-# quickly kill picom
-alias kpi='killall picom'
-
 #hardware info --short
 alias hw="hwinfo --short"
 
 #audio check pulseaudio or pipewire
 alias audio="pactl info | grep 'Server Name'"
 
-#skip integrity check
-alias paruskip='paru -S --mflags --skipinteg'
-alias yayskip='yay -S --mflags --skipinteg'
-alias trizenskip='trizen -S --skipinteg'
-
 #check vulnerabilities microcode
 alias microcode='grep . /sys/devices/system/cpu/vulnerabilities/*'
 
-#get fastest mirrors in your neighborhood
-alias mirror="sudo reflector -f 30 -l 30 --number 10 --verbose --save /etc/pacman.d/mirrorlist"
-alias mirrord="sudo reflector --latest 30 --number 10 --sort delay --save /etc/pacman.d/mirrorlist"
-alias mirrors="sudo reflector --latest 30 --number 10 --sort score --save /etc/pacman.d/mirrorlist"
-alias mirrora="sudo reflector --latest 30 --number 10 --sort age --save /etc/pacman.d/mirrorlist"
-#our experimental - best option for the moment
-alias mirrorx="sudo reflector --age 6 --latest 20  --fastest 20 --threads 5 --sort rate --protocol https --save /etc/pacman.d/mirrorlist"
-alias mirrorxx="sudo reflector --age 6 --latest 20  --fastest 20 --threads 20 --sort rate --protocol https --save /etc/pacman.d/mirrorlist"
-alias ram='rate-mirrors --allow-root --disable-comments arch | sudo tee /etc/pacman.d/mirrorlist'
-alias rams='rate-mirrors --allow-root --disable-comments --protocol https arch  | sudo tee /etc/pacman.d/mirrorlist'
-
 #mounting the folder Public for exchange between host and guest on virtualbox
 alias vbm="sudo /usr/local/bin/arcolinux-vbox-share"
-
-#enabling vmware services
-alias start-vmware="sudo systemctl enable --now vmtoolsd.service"
-alias vmware-start="sudo systemctl enable --now vmtoolsd.service"
-alias sv="sudo systemctl enable --now vmtoolsd.service"
-
-#shopt
-#shopt -s autocd # change to named directory
-#shopt -s cdspell # autocorrects cd misspellings
-#shopt -s cmdhist # save multi-line commands in history as single line
-#shopt -s dotglob
-#shopt -s histappend # do not overwrite history
-#shopt -s expand_aliases # expand aliases
 
 #youtube download
 alias yta-aac="yt-dlp --extract-audio --audio-format aac "
@@ -317,15 +246,6 @@ alias yta-flac="yt-dlp --extract-audio --audio-format flac "
 alias yta-mp3="yt-dlp --extract-audio --audio-format mp3 "
 alias ytv-best="yt-dlp -f 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/bestvideo+bestaudio' --merge-output-format mp4 "
 
-#Recent Installed Packages
-alias rip="expac --timefmt='%Y-%m-%d %T' '%l\t%n %v' | sort | tail -200 | nl"
-alias riplong="expac --timefmt='%Y-%m-%d %T' '%l\t%n %v' | sort | tail -3000 | nl"
-
-#iso and version used to install ArcoLinux
-alias iso="cat /etc/dev-rel | awk -F '=' '/ISO/ {print $2}'"
-alias isoo="cat /etc/dev-rel"
-
-#Cleanup orphaned packages
 alias cleanup='sudo pacman -Rns $(pacman -Qtdq)'
 
 #clear
@@ -438,49 +358,6 @@ ex ()
     echo "'$1' is not a valid file"
   fi
 }
-
-#wayland aliases
-alias wsimplescreenrecorder="wf-recorder -a"
-
-#btrfs aliases
-alias btrfsfs="sudo btrfs filesystem df /"
-alias btrfsli="sudo btrfs su li / -t"
-
-#snapper aliases
-alias snapcroot="sudo snapper -c root create-config /"
-alias snapchome="sudo snapper -c home create-config /home"
-alias snapli="sudo snapper list"
-alias snapcr="sudo snapper -c root create"
-alias snapch="sudo snapper -c home create"
-
-#Leftwm aliases
-alias lti="leftwm-theme install"
-alias ltu="leftwm-theme uninstall"
-alias lta="leftwm-theme apply"
-alias ltupd="leftwm-theme update"
-alias ltupg="leftwm-theme upgrade"
-
-#arcolinux applications
-#att is a symbolic link now
-#alias att="archlinux-tweak-tool"
-alias adt="arcolinux-desktop-trasher"
-alias abl="arcolinux-betterlockscreen"
-alias agm="arcolinux-get-mirrors"
-alias amr="arcolinux-mirrorlist-rank-info"
-alias aom="arcolinux-osbeck-as-mirror"
-alias ars="arcolinux-reflector-simple"
-alias atm="arcolinux-tellme"
-alias avs="arcolinux-vbox-share"
-alias awa="arcolinux-welcome-app"
-
-#remove
-alias rmgitcache="rm -r ~/.cache/git"
-
-#moving your personal files and folders from /personal to ~
-alias personal='cp -Rf /personal/* ~'
-
-#create a file called .zshrc-personal and put all your personal aliases
-#in there. They will not be overwritten by skel.
 
 [[ -f ~/.zshrc-personal ]] && . ~/.zshrc-personal
 
