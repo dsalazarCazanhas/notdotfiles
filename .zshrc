@@ -1,3 +1,6 @@
+neofetch
+fortune | cowsay | lolcat
+
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
@@ -5,10 +8,8 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 typeset -g POWERLEVEL9K_INSTANT_PROMPT=quiet
-neofetch
-###
-# If you come from bash you might have to change your $PATH.
-# export PATH=$HOME/bin:/usr/local/bin:$PATH
+
+#########################################################################################
 
 # Path to your oh-my-zsh installation.
 #installation via script from github
@@ -23,7 +24,7 @@ export ZSH=/usr/share/oh-my-zsh/
 # if you installed the package oh-my-zsh-powerline-theme-git then you type here "powerline" as zsh theme
 ZSH_THEME="powerline"
 
-# Mis Configs:
+# Plugins:
 source /usr/share/zsh-theme-powerlevel10k/powerlevel10k.zsh-theme
 source /usr/share/zsh/plugins/zsh-history-substring-search/zsh-history-substring-search.zsh
 source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
@@ -66,10 +67,6 @@ fi
 ####   ARCOLINUX SETTINGS   ####
 export PAGER='most'
 
-if [ -f /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]; then
-  source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-fi
-
 setopt GLOB_DOTS
 #share commands between terminal instances or not
 unsetopt SHARE_HISTORY
@@ -108,7 +105,7 @@ alias rd='bat'
 alias wt='nvim'
 
 #lock screen with image
-alias lockme="i3lock -i /home/dsalazar/Pictures/anotherlock.png -F -e -f -B 0.9"
+#alias lockme="i3lock -i /home/dsalazar/Pictures/anotherlock.png -F -e -f -B 0.9"
 
 #images
 alias show='kitty +kitten icat'

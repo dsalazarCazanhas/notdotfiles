@@ -1,0 +1,7 @@
+For colorfull the terminal
+1-fortune(cowfortune)
+2-neofetch
+3-figlet and toilet
+4-lolcat
+5-bat
+6-lsd
