@@ -25,11 +25,15 @@ export ZSH=/usr/share/oh-my-zsh/
 ZSH_THEME="powerline"
 
 # Plugins:
-source /usr/share/zsh-theme-powerlevel10k/powerlevel10k.zsh-theme
-source /usr/share/zsh/plugins/zsh-history-substring-search/zsh-history-substring-search.zsh
-source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+source ~/.powerlevel10k/powerlevel10k.zsh-theme
+#source /usr/share/zsh/plugins/zsh-history-substring-search/zsh-history-substring-search.zsh
+#source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+#source /usr/share/oh-my-zsh/plugins/history-substring-search/history-substring-search.zsh
+#source /usr/share/oh-my-zsh/plugins/docker/docker.plugin.zsh
+source /usr/share/zsh/share/antigen.zsh
+#source /usr/share/zsh/plugins/alias-tips/alias-tips.plugin.zsh
 source /usr/share/zsh-sudo/sudo.plugin.zsh
-source /usr/share/oh-my-zsh/plugins/git/git.plugin.zsh
+#source /usr/share/oh-my-zsh/plugins/git/git.plugin.zsh
 
 # Uncomment the following line to disable auto-setting terminal title.
 DISABLE_AUTO_TITLE="true"
@@ -58,7 +62,7 @@ COMPLETION_WAITING_DOTS="true"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-#plugins=(git)
+plugins=(git zsh-syntax-highlighting zsh-autosuggestions history-substring-search docker)
 
 if [ -f $ZSH/oh-my-zsh.sh ]; then
   source $ZSH/oh-my-zsh.sh
@@ -106,6 +110,9 @@ alias wt='nvim'
 
 #lock screen with image
 #alias lockme="i3lock -i /home/dsalazar/Pictures/anotherlock.png -F -e -f -B 0.9"
+
+#network
+alias ports='ss -tulw'
 
 #images
 alias show='kitty +kitten icat'
