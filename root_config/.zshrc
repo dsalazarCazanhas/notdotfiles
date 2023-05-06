@@ -26,7 +26,7 @@ ZSH_THEME="powerline"
 
 # Plugins:
 source /usr/share/zsh-theme-powerlevel10k/powerlevel10k.zsh-theme
-source /usr/share/sudo-plugin/sudo.plugin.zsh
+#source /usr/share/sudo-plugin/sudo.plugin.zsh
 
 # Uncomment the following line to disable auto-setting terminal title.
 DISABLE_AUTO_TITLE="true"
