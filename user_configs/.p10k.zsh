@@ -35,6 +35,7 @@
     dir                     # current directory
     vcs                     # git status
     command_execution_time  # execution time
+    virtualenv
     #context
     # =========================[ Line #2 ]=========================
     newline                 # \n
