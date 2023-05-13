@@ -6,9 +6,7 @@ else
   export hello_user="HELLO!! $(whoami), today is $(date)"
   echo $hello_user | cowsay | lolcat
 fi
-# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
-# Initialization code that may require console input (password prompts, [y/n]
-# confirmations, etc.) must go above this block; everything else may go below.
+
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
@@ -16,30 +14,17 @@ typeset -g POWERLEVEL9K_INSTANT_PROMPT=quiet
 
 #########################################################################################
 
-# Path to your oh-my-zsh installation.
-#installation via script from github
-#export ZSH="/home/$USER/.oh-my-zsh"
-#installation via paru -S oh-my-zsh-git
 export ZSH=/usr/share/oh-my-zsh/
 
-# Set name of the theme to load --- if set to "random", it will
-# load a random theme each time oh-my-zsh is loaded, in which case,
-# to know which specific one was loaded, run: echo $RANDOM_THEME
-# See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
-# if you installed the package oh-my-zsh-powerline-theme-git then you type here "powerline" as zsh theme
 ZSH_THEME="powerline"
 
 # Plugins:
 source /usr/share/zsh-theme-powerlevel10k/powerlevel10k.zsh-theme
-#source /usr/share/oh-my-zsh/custom/plugins/sudo/sudo.plugin.zsh
 
-# Uncomment the following line to disable auto-setting terminal title.
 DISABLE_AUTO_TITLE="true"
 
-# Uncomment the following line to display red dots whilst waiting for completion.
 COMPLETION_WAITING_DOTS="true"
 
-# see 'man strftime' for details.
 # HIST_STAMPS="mm/dd/yyyy"
 
 # Standard plugins can be found in ~/.oh-my-zsh/plugins/*
@@ -54,11 +39,8 @@ fi
 export PAGER='most'
 
 setopt GLOB_DOTS
-#share commands between terminal instances or not
 unsetopt SHARE_HISTORY
-#setopt SHARE_HISTORY
 
-# If not running interactively, don't do anything
 [[ $- != *i* ]] && return
 
 export HISTCONTROL=ignoreboth:erasedups
@@ -67,7 +49,6 @@ export HISTCONTROL=ignoreboth:erasedups
 export EDITOR='lvim'
 export VISUAL='bat'
 
-#PS1='[\u@\h \W]\$ '
 
 if [ -d "$HOME/.bin" ] ;
   then PATH="$HOME/.bin:$PATH"
