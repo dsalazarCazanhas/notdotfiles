@@ -6,7 +6,7 @@ have some plugins defined:
 -zsh-autosuggestions
 -history-substring-search
 -docker
--sudo(the plugin is in the user_configs folder)
+-sudo(the plugin is in the misc folder)
 Some of the plugins came with zsh others I installed from the AUR
 
 The terminal config uses hackNerdFont, which is in the user_configs folder
