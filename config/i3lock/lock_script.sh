@@ -8,6 +8,9 @@ trap revert HUP INT TERM
 xset +dpms dpms 0 0 5
 scrot -d 1 /tmp/locking_screen.png
 convert -blur 0x8 /tmp/locking_screen.png /tmp/screen_blur.png
-convert -composite /tmp/screen_blur.png ~/Pictures/rick.png -geometry -20x1200 /tmp/screen.png
+convert -composite /tmp/screen_blur.png ~/.config/i3lock/rick.png -geometry -20x1200 /tmp/screen.png
+sleep 1
+convert -composite /tmp/screen.png ~/.config/i3lock/glados_edited.png -geometry +550 /tmp/screen.png
+sleep 1
 i3lock -i /tmp/screen.png -ute
 revert
