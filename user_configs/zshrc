@@ -11,28 +11,21 @@ typeset -g POWERLEVEL9K_INSTANT_PROMPT=quiet
 
 export ZSH=/usr/share/oh-my-zsh/
 
-ZSH_THEME="powerline"
-
-# Plugins:
+#ZSH_THEME
 source /usr/share/zsh-theme-powerlevel10k/powerlevel10k.zsh-theme
-
-DISABLE_AUTO_TITLE="false"
-
-COMPLETION_WAITING_DOTS="true"
-
-# HIST_STAMPS="mm/dd/yyyy"
 
 # Standard plugins can be found in ~/.oh-my-zsh/plugins/*
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
-plugins=(git zsh-syntax-highlighting zsh-autosuggestions history-substring-search sudo)
+plugins=(git zsh-syntax-highlighting zsh-autosuggestions history-substring-search sudo docker)
 
 if [ -f $ZSH/oh-my-zsh.sh ]; then
   source $ZSH/oh-my-zsh.sh
 fi
 
 ####   SETTINGS   ####
+DISABLE_AUTO_TITLE="false"
+COMPLETION_WAITING_DOTS="true"
 export PAGER='most'
-
 setopt GLOB_DOTS
 unsetopt SHARE_HISTORY
 
@@ -55,6 +48,10 @@ fi
 
 ### ALIASES ###
 
+alias path="echo $PATH | lolcat"
+
+#Virtualbox
+alias vbox='VBoxManage'
 
 #list
 alias ls='lsd --color=auto'
@@ -70,7 +67,7 @@ alias vim=$EDITOR
 #pacman easy
 alias pacman='sudo pacman -S'
 alias fullup='sudo pacman -Syyu'
-alias paclean="sudo pacman -Qtdq | sudo ifne pacman -Rns - 2>/dev/null && echo 'Pacman packages folder are clean'"
+alias paclean="sudo pacman -Qtdq | sudo ifne pacman -Rns - 2>/dev/null"
 
 #network
 alias ports='ss -tulw'
@@ -100,17 +97,15 @@ alias rmpacmanlock="sudo rm /var/lib/pacman/db.lck"
 #continue download
 alias wget="wget -c"
 
-#userlist
-alias userlist="cut -d: -f1 /etc/passwd | sort"
-
-#ps
+#proccess
 alias psa="ps auxf"
 alias psgrep="ps aux | grep -v grep | grep -i -e VSZ -e"
+alias systemctl="sudo systemctl"
 
 #grub update
 alias update-grub="sudo grub-mkconfig -o /boot/grub/grub.cfg"
 
-#add new fonts
+# add new fonts
 alias update-fc='sudo fc-cache -fv'
 
 #hardware info --short
@@ -122,12 +117,6 @@ alias microcode='grep . /sys/devices/system/cpu/vulnerabilities/*'
 #get the error messages from journalctl
 alias jctl="journalctl -p 3 -xb"
 
-#reading logs with bat
-alias lpacman="bat /var/log/pacman.log"
-alias lxorg="bat /var/log/Xorg.0.log"
-alias lxorgo="bat /var/log/Xorg.0.log.old"
-
-#gpg
 #verify signature for isos
 alias gpg-check="gpg2 --keyserver-options auto-key-retrieve --verify"
 alias fix-gpg-check="gpg2 --keyserver-options auto-key-retrieve --verify"
@@ -144,11 +133,8 @@ alias sysfailed="systemctl list-units --failed"
 alias shutdown="sudo shutdown now"
 alias reboot="sudo reboot now"
 
-#give the list of all installed desktops - xsessions desktops
-alias xd="ls /usr/share/xsessions"
-alias xdw="ls /usr/share/wayland-sessions"
-
 #my functions
+#Full delete a file; very hard to recover; scrub is from AUR
 rmk () {
 	scrub -p dod $1
 	shred -zun 10 -v $1

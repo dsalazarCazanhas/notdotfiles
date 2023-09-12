@@ -34,14 +34,12 @@
     # =========================[ Line #1 ]=========================
     dir                     # current directory
     vcs                     # git status
-    command_execution_time  # execution time
     virtualenv
-    #context
-    # =========================[ Line #2 ]=========================
+  # =========================[ Line #2 ]=========================
     newline                 # \n
-    #command_execution_time
     context
     prompt_char           # prompt symbol
+    background_jobs         # presence of background jobs
   )
 
   # The list of segments shown on the right. Fill it with less important segments.
