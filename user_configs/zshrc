@@ -1,6 +1,4 @@
 neofetch | lolcat
-export hello_user="HELLO!! $(whoami), today is $(date)"
-echo $hello_user | cowsay | lolcat
 
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
