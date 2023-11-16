@@ -133,7 +133,12 @@ alias reboot="sudo reboot now"
 
 #my functions
 #Full delete a file; very hard to recover; scrub is from AUR
-rmk () {
+destroy () {
+  if [[ $(scrub &> /dev/null;echo $?) != 0 ]] ;
+  then
+    echo "Install scrub tool from AUR!"
+    return 0
+  fi
 	scrub -p dod $1
 	shred -zun 10 -v $1
 }
