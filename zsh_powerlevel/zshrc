@@ -14,14 +14,15 @@ source /usr/share/zsh-theme-powerlevel10k/powerlevel10k.zsh-theme
 
 # Standard plugins can be found in ~/.oh-my-zsh/plugins/*
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
-plugins=(git zsh-syntax-highlighting zsh-autosuggestions history-substring-search sudo docker)
+plugins=(git zsh-syntax-highlighting zsh-autosuggestions sudo)
+#history-substring-search
 
 if [ -f $ZSH/oh-my-zsh.sh ]; then
   source $ZSH/oh-my-zsh.sh
 fi
 
 ####   SETTINGS   ####
-DISABLE_AUTO_TITLE="false"
+DISABLE_AUTO_TITLE="true"
 COMPLETION_WAITING_DOTS="true"
 export PAGER='most'
 setopt GLOB_DOTS
@@ -47,6 +48,13 @@ fi
 ### ALIASES ###
 
 alias path="echo $PATH | lolcat"
+alias commix="python3 /home/darksider/Downloads/Repos/commix/commix.py"
+alias givemeapass="python3 /home/darksider/Projects/PassGen.py"
+alias cyberchef="firefox /usr/share/webapps/cyberchef/index.html"
+alias apps4me="vim ~/Downloads/Repos/notdotfiles/misc/apps4me.txt"
+alias shadow_server="sslocal-rust -c ~/.config/shadowsocks-gtk-rs/profiles/ss.json5"
+alias shadow_proxy="export HTTP_PROXY="socks5h://127.0.0.1:8357";export http_proxy="socks5h://127.0.0.1:8357";export HTTPS_PROXY="socks5h://127.0.0.1:8357";export https_proxy="socks5h://127.0.0.1:8357";   
+export ALL_PROXY="socks5h://127.0.0.1:8357""
 
 #Virtualbox
 alias vbox='VBoxManage'
@@ -56,7 +64,6 @@ alias ls='lsd --color=auto'
 alias la='lsd -a --group-directories-first'
 alias ll='lsd -alFh --group-directories-first'
 alias l='lsd'
-#alias l.="lsd -A | egrep '^\.'"
 
 #editing
 alias cat=$LIST
@@ -69,10 +76,7 @@ alias paclean="sudo pacman -Qtdq | sudo ifne pacman -Rns - 2>/dev/null"
 
 #network
 alias ports='ss -tulw'
-alias myIp="curl 'https://api.ipify.org?format=json'"
-
-#images
-alias show='kitty +kitten icat'
+alias myIp='curl https://api.ipify.org\?format\=json'
 
 #fix obvious typo's
 alias cd..='cd ..'
@@ -137,7 +141,7 @@ alias reboot="sudo reboot now"
 destroy () {
   if [[ $(scrub -v &> /dev/null;echo $?) != 0 ]] ;
   then
-    echo "Install scrub tool from AUR!"
+    echo "Needs 'scrub' tool from AUR!!"
     return 0
   fi
 	scrub -p dod $1
@@ -174,6 +178,10 @@ ex ()
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+if [ -d $HOME/.nvm ] ; then
+	export NVM_DIR="$HOME/.nvm"
+	[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+	[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+fi
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
