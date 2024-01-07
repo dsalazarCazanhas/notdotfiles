@@ -37,7 +37,6 @@ ExecStop=/usr/local/bin/ss-server -c /etc/shadowsocks/shadowsocks.json -a shadow
 WantedBy=multi-user.target
 
 ### Make NVIM remember last cursor position (pure lua) ###
-
 local group = vim.api.nvim_create_augroup("jump_last_position", { clear = true })
 vim.api.nvim_create_autocmd(
 	"BufReadPost",
@@ -50,5 +49,10 @@ vim.api.nvim_create_autocmd(
 	group = group
 	}
 )
+
+### Bypass Out Of the Box Experience (windows 11 Internet Requirement) ###
+In the 'Let's connect you to a network' screen, press shift+F10 to launch cmd
+Type the following command: OOBE\BYPASSNRO
+After the successful execution the system should restart.
 
 ### EOF ###
