@@ -3,3 +3,5 @@ talosintelligence
 mxtoolbox
 vulndb
 abuseip
+phonebook.cz
+intelx.io
