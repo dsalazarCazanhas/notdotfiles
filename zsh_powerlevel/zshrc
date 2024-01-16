@@ -36,6 +36,7 @@ export HISTCONTROL=ignoreboth:erasedups
 export EDITOR='nvim'
 export LIST='bat'
 
+export TOR='$HOME/Downloads/tor-browser'
 
 if [ -d "$HOME/.bin" ] ;
   then PATH="$HOME/.bin:$PATH"
@@ -48,13 +49,23 @@ fi
 ### ALIASES ###
 
 alias path="echo $PATH | lolcat"
+
+# CyberSec apps
 alias commix="python3 /home/darksider/Downloads/Repos/commix/commix.py"
-alias givemeapass="python3 /home/darksider/Projects/PassGen.py"
 alias cyberchef="firefox /usr/share/webapps/cyberchef/index.html"
-alias apps4me="vim ~/Downloads/Repos/notdotfiles/misc/apps4me.txt"
+
+# Script alias
+alias givemeapass="python3 /home/darksider/Projects/PassGen.py"
+
+# Shadowsocks Server
 alias shadow_server="sslocal-rust -c ~/.config/shadowsocks-gtk-rs/profiles/ss.json5"
 alias shadow_proxy="export HTTP_PROXY="socks5h://127.0.0.1:8357";export http_proxy="socks5h://127.0.0.1:8357";export HTTPS_PROXY="socks5h://127.0.0.1:8357";export https_proxy="socks5h://127.0.0.1:8357";   
 export ALL_PROXY="socks5h://127.0.0.1:8357""
+
+# Tor Server
+alias torb="cd ${TOR} && ./start-tor-browser.desktop"
+alias tor_server="sudo systemctl restart tor"
+alias tor_proxy="export http_proxy='socks5h://127.0.0.1:9050';export https_proxy='socks5h://127.0.0.1:9050'"
 
 #Virtualbox
 alias vbox='VBoxManage'
@@ -78,6 +89,9 @@ alias paclean="sudo pacman -Qtdq | sudo ifne pacman -Rns - 2>/dev/null"
 alias ports='ss -tulw'
 alias myIp='curl https://api.ipify.org\?format\=json'
 
+#images
+alias show='kitty +kitten icat'
+
 #fix obvious typo's
 alias cd..='cd ..'
 
@@ -99,6 +113,9 @@ alias rmpacmanlock="sudo rm /var/lib/pacman/db.lck"
 
 #continue download
 alias wget="wget -c"
+
+#copy with progress bar
+alias cp="pycp -i"
 
 #proccess
 alias psa="ps auxf"
