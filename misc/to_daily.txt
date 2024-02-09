@@ -55,4 +55,9 @@ In the 'Let's connect you to a network' screen, press shift+F10 to launch cmd
 Type the following command: OOBE\BYPASSNRO
 After the successful execution the system should restart.
 
+### Wlan profiles clear in Windows ###
+netsh
+netsh wlan
+show profiles ssid key="clear"
+
 ### EOF ###
