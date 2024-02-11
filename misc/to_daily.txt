@@ -60,4 +60,16 @@ netsh
 netsh wlan
 show profiles ssid key="clear"
 
+### Recover password on windows without reinstall ###
+On login windows press and hold shift and reboot the pc. Then recovery window will pop up, enter to troubleshooting,
+advanced options, command prompt. Then:
+-->copy C:\Windows\System32\Utilman.exe C:\Windows\System32\Utilman.exebak
+-->copy C:\Windows\System32\cmd.exe C:\Windows\System32\Utilman.exe /y
+Reboot again. On login screen got to accessibility press it and a command prompt will appear:
+-->net localgroup administrastors
+The list of account shows up, select the one to reset its password:
+-->net user your_username *
+Change the password and done.
+Don't forget to restore utilman to its original state
+
 ### EOF ###
