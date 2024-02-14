@@ -1,3 +1,4 @@
+launchpad
 virustotal
 talosintelligence
 mxtoolbox

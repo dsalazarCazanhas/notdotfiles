@@ -1,3 +1,4 @@
+whatweb -- web analysis like wappalyzer
 hydra -- web brute forcing
 crunch -- wordlist generator parameter based
 cewl -- wordlist web generator

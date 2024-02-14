@@ -1,4 +1,4 @@
-neofetch
+neofetch | lolcat
 
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
@@ -8,15 +8,8 @@ typeset -g POWERLEVEL9K_INSTANT_PROMPT=quiet
 #########################################################################################
 
 export ZSH=/usr/share/oh-my-zsh/
-
-#ZSH_THEME
-source /usr/share/zsh-theme-powerlevel10k/powerlevel10k.zsh-theme
-
-# Standard plugins can be found in ~/.oh-my-zsh/plugins/*
-# Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
+source ~/.oh-my-zsh/custom/themes/powerlevel10k/powerlevel10k.zsh-theme
 plugins=(git zsh-syntax-highlighting zsh-autosuggestions sudo)
-#history-substring-search
-
 if [ -f $ZSH/oh-my-zsh.sh ]; then
   source $ZSH/oh-my-zsh.sh
 fi
@@ -32,11 +25,10 @@ unsetopt SHARE_HISTORY
 
 export HISTCONTROL=ignoreboth:erasedups
 
-# Make neovim the default editor and bat for files listing
 export EDITOR='nvim'
 export LIST='bat'
-
-export TOR='$HOME/Downloads/tor-browser'
+export TOR='/usr/share/tor-browser/'
+export CyberSec='/usr/share/cybersec/'
 
 if [ -d "$HOME/.bin" ] ;
   then PATH="$HOME/.bin:$PATH"
@@ -51,20 +43,18 @@ fi
 alias path="echo $PATH | lolcat"
 
 # CyberSec apps
-alias commix="python3 /home/darksider/Downloads/Repos/commix/commix.py"
-alias cyberchef="firefox /usr/share/webapps/cyberchef/index.html"
+alias commix="python3 ${CyberSec}commix*/commix.py"
+alias cyberchef="firefox ${CyberSec}cyberchef/*.html"
 
 # Script alias
-alias givemeapass="python3 /home/darksider/Projects/PassGen.py"
+alias givemeapass="python3 ~/.config/PassGen.py"
 
 # Shadowsocks Server
-alias shadow_server="sslocal-rust -c ~/.config/shadowsocks-gtk-rs/profiles/ss.json5"
-alias shadow_proxy="export HTTP_PROXY="socks5h://127.0.0.1:8357";export http_proxy="socks5h://127.0.0.1:8357";export HTTPS_PROXY="socks5h://127.0.0.1:8357";export https_proxy="socks5h://127.0.0.1:8357";   
-export ALL_PROXY="socks5h://127.0.0.1:8357""
+alias shadow_server="sslocal-rust -c ~/Downloads/Shadowsocks_vpn/shadow_connection.json5"
+alias shadow_proxy="export HTTP_PROXY="socks5h://127.0.0.1:8357";export http_proxy="socks5h://127.0.0.1:8357";export HTTPS_PROXY="socks5h://127.0.0.1:8357";export https_proxy="socks5h://127.0.0.1:8357""
 
 # Tor Server
-alias torb="cd ${TOR} && ./start-tor-browser.desktop"
-alias tor_server="sudo systemctl restart tor"
+alias torb="sudo systemctl restart tor && cd ${TOR} && ./start-tor-browser.desktop"
 alias tor_proxy="export http_proxy='socks5h://127.0.0.1:9050';export https_proxy='socks5h://127.0.0.1:9050'"
 
 #Virtualbox
@@ -88,9 +78,6 @@ alias paclean="sudo pacman -Qtdq | sudo ifne pacman -Rns - 2>/dev/null"
 #network
 alias ports='ss -tulw'
 alias myIp='curl https://api.ipify.org\?format\=json'
-
-#images
-alias show='kitty +kitten icat'
 
 #fix obvious typo's
 alias cd..='cd ..'
