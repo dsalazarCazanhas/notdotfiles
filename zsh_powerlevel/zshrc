@@ -1,15 +1,14 @@
-neofetch | lolcat
-
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
-typeset -g POWERLEVEL9K_INSTANT_PROMPT=quiet
+#typeset -g POWERLEVEL9K_INSTANT_PROMPT=quiet
 
 #########################################################################################
 
-export ZSH=/usr/share/oh-my-zsh/
-source ~/.oh-my-zsh/custom/themes/powerlevel10k/powerlevel10k.zsh-theme
-plugins=(git zsh-syntax-highlighting zsh-autosuggestions sudo)
+export ZSH=/usr/share/oh-my-zsh
+
+plugins=(git zsh-syntax-highlighting zsh-autosuggestions sudo python)
+
 if [ -f $ZSH/oh-my-zsh.sh ]; then
   source $ZSH/oh-my-zsh.sh
 fi
@@ -27,7 +26,6 @@ export HISTCONTROL=ignoreboth:erasedups
 
 export EDITOR='nvim'
 export LIST='bat'
-export TOR='/usr/share/tor-browser/'
 export CyberSec='/usr/share/cybersec/'
 
 if [ -d "$HOME/.bin" ] ;
@@ -38,6 +36,8 @@ if [ -d "$HOME/.local/bin" ] ;
   then PATH="$HOME/.local/bin:$PATH"
 fi
 
+source $HOME/.powerlevel10k/powerlevel10k.zsh-theme
+
 ### ALIASES ###
 
 alias path="echo $PATH | lolcat"
@@ -47,14 +47,14 @@ alias commix="python3 ${CyberSec}commix*/commix.py"
 alias cyberchef="firefox ${CyberSec}cyberchef/*.html"
 
 # Script alias
-alias givemeapass="python3 ~/.config/PassGen.py"
+alias givemeapass="python3 ~/.config/Scripts/PassGen.py"
 
 # Shadowsocks Server
-alias shadow_server="sslocal-rust -c ~/Downloads/Shadowsocks_vpn/shadow_connection.json5"
+alias shadow_server="sslocal -c $HOME/.config/Shadowsocks_cfg/shadow_connection.json5"
 alias shadow_proxy="export HTTP_PROXY="socks5h://127.0.0.1:8357";export http_proxy="socks5h://127.0.0.1:8357";export HTTPS_PROXY="socks5h://127.0.0.1:8357";export https_proxy="socks5h://127.0.0.1:8357""
 
 # Tor Server
-alias torb="sudo systemctl restart tor && cd ${TOR} && ./start-tor-browser.desktop"
+alias torb="sudo systemctl restart tor && cd ${CyberSec}tor-browser && ./start-tor-browser.desktop --verbose; cd"
 alias tor_proxy="export http_proxy='socks5h://127.0.0.1:9050';export https_proxy='socks5h://127.0.0.1:9050'"
 
 #Virtualbox
@@ -158,20 +158,20 @@ ex ()
 {
   if [ -f $1 ] ; then
     case $1 in
-      *.tar.bz2)   tar xjf $1   ;;
-      *.tar.gz)    tar xzf $1   ;;
-      *.bz2)       bunzip2 $1   ;;
-      *.rar)       unrar x $1   ;;
-      *.gz)        gunzip $1    ;;
-      *.tar)       tar xf $1    ;;
-      *.tbz2)      tar xjf $1   ;;
-      *.tgz)       tar xzf $1   ;;
-      *.zip)       unzip $1     ;;
-      *.Z)         uncompress $1;;
-      *.7z)        7z x $1      ;;
-      *.deb)       ar x $1      ;;
-      *.tar.xz)    tar xf $1    ;;
-      *.tar.zst)   tar xf $1    ;;
+      *.tar.bz2)   tar xvjf $1   ;;
+      *.tar.gz)    tar xvzf $1   ;;
+      *.bz2)       bunzip2 -v $1   ;;
+      *.rar)       unrar vx $1   ;;
+      *.gz)        gunzip -v $1    ;;
+      *.tar)       tar xvf $1    ;;
+      *.tbz2)      tar xvjf $1   ;;
+      *.tgz)       tar xvzf $1   ;;
+      *.zip)       unzip -v $1     ;;
+      *.Z)         uncompress -v $1;;
+      *.7z)        7z vx $1      ;;
+      *.deb)       ar vx $1      ;;
+      *.tar.xz)    tar xvf $1    ;;
+      *.tar.zst)   tar xvf $1    ;;
       *)           echo "'$1' cannot be extracted via ex()" ;;
     esac
   else
@@ -189,3 +189,5 @@ if [ -d $HOME/.nvm ] ; then
 fi
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+true

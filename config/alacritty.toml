@@ -1,0 +1,44 @@
+import = [
+    "/usr/bin/alacritty/themes/hardhacker.toml"
+]
+
+live_config_reload = true
+
+[cursor]
+blink_interval = 550
+unfocused_hollow = false
+thickness = 0.1
+vi_mode_style = "Block"
+
+[cursor.style]
+shape = "Beam"
+blinking = "On"
+
+[window]
+dynamic_title = true
+dynamic_padding = false
+opacity = 0.9
+decorations = "full"
+
+[colors]
+draw_bold_text_with_bright_colors = true
+
+[font]
+builtin_box_drawing = true
+size = 12
+
+[font.normal]
+family = "HackNerdFont"
+style = "Regular"
+
+[selection]
+save_to_clipboard = true
+semantic_escape_chars = ",│`|:\"' ()[]{}<>"
+
+[window.dimensions]
+columns = 130
+lines = 34 
+
+[window.padding]
+x = 15
+y = 15
