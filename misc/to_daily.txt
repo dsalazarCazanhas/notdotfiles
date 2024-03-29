@@ -76,4 +76,12 @@ The list of account shows up, select the one to reset its password:
 Change the password and done.
 Don't forget to restore utilman to its original state
 
+### PROMISC mode on linux ###
+auto eth1
+iface eth1 inet manual
+  up ifconfig $IFACE 0.0.0.0 up
+  up ip link set $IFACE promisc on
+  down ip link set $IFACE promisc off
+  down ifconfig $IFACE down
+
 ### EOF ###
