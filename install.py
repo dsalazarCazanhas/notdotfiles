@@ -9,18 +9,31 @@ packages = ['zip', 'unzip', 'alacritty-git', 'tmux-git', 'git', 'oh-my-zsh-git',
   'virtualbox-bin-guest-iso', 'virtualbox-host-modules-arch']
 cybersec_path = "/user/share/cybersec"
 # Paru -Sw packages download only
-current_dir = os.path.abspath(os.path.curdir())
-home_path = os.getenv('HOME')
+current_dir = os.path.abspath(os.path.curdir)
+home_path = subprocess.run(['echo', '$HOME'], check=True)
 config_dir = f"{home_path}/.config"
-
+cur_user = subprocess.run(['echo', '$USER'], check=True)
+cur_user_uid = int(subprocess.check_output(['id', '-u']))
+cur_user_gid = int(subprocess.check_output(['id', '-g']))
 
 # First, install paru
 def install_paru():
-    time.sleep(1)
+    time.sleep(2)
     try:
-        os.system("git clone https://aur.archlinux.org/paru-bin /tmp/paru && cd /tmp/paru; makepkg -sic")
+        subprocess.run(['git', 'clone', 'https://aur.archlinux.org/paru-bin', '/tmp/paru', '&&', 
+        'cd','/tmp/paru', ';', 'makepkg', '-sic'])
         return True
     except:
+        raise Exception("Problema con tu primo el paru")
+        return False
+
+def set_tor():
+    time.sleep(1)
+    try:
+        subprocess.run(['paru', '-S', 'proxychains tor torsocks'])
+        return True
+    except:
+        raise Exception("Problemas en el metodo set tor")
         return False
 
 def install_oh_my_zsh():
@@ -37,63 +50,72 @@ def install_fzf():
         return True
     except:
         return False
-
-def set_tor():
-    time.sleep(1)
-    try:
-        os.system("paru -S proxychains tor torsocks")
-        return True
-    except:
-        return False
     
-def check_process_status(process_name):
+def check_process_status(String: process_name):
     try:
-        subprocess.check_output(["pgrep", process_name])
+        subprocess.check_output(['pgrep', process_name])
         return True
     except subprocess.CalledProcessError:
+        raise Exception("This process is not running")
         return False
 
 def download_packages():
-    os.system("sudo systemctl restart tor")
+    try:
+        subprocess.run(['sudo', 'systemctl', 'restart', 'tor'])
+    except:
+        print("Tor isn't running")
+        return 1
     if check_process_status('tor'):
         try:
-            subprocess.run(["proxychains4", "paru", "-Sw", "--noconfirm"] + packages)
+            subprocess.run(["proxychains4", "paru", "-Sw", "--noconfirm"] + packages, check=True)
             return True
         except subprocess.CalledProcessError:
-            return False
+            raise Exception("There was an error downloading packages")
+            return 1
     else:
-        pass
+        raise Exception("There is a problem with tor process")
+        return 1
 
 def install_packages():
-    if download_packages:
+    if download_packages():
         try:
-            subprocess.run(["paru", "-S", "--noconfirm", "--needed", "--sudoloop"] + packages)
+            subprocess.run(["paru", "-S", "--noconfirm", "--needed", "--sudoloop"] + packages, check=True)
         except subprocess.CalledProcessError:
-            return False
+            raise Exception("There was a problem installing packages")
+            return 1
     else:
-        pass
+        raise Exception("There is an error on download_packages function")
+        return 1
 
 def main():
     print("Installing...")
     time.sleep(1)
-    print("Preparing folders")
-    os.system(f"sudo mkdir /usr/share/cybersec && sudo chown {os.getenv('UID')}:{os.getenv('GID')} /usr/share/cybersec")
+    print("Preparing folders...")
     time.sleep(2)
-    print("Installing ohmyzsh")
-    ohmyzsh()
-    print("Installing FZF")
-    install_fzf()
+    try:
+        subprocess.run(['sudo', 'mkdir', '/usr/share/cybersec'], check = True)
+        subprocess.run(['sudo', 'chown', '{cur_user_uid}:{cur_user_gid}', '/usr/share/cybersec'], check = True)
+        return 0
+    except subprocess.CalledProcessError:
+        raise Exception(f"There was an error executing sudo")
+        exit
     time.sleep(2)
-    print("Setting commix, cyberchef and tor-browser")
-    os.system(f"git clone https://github.com/commixproject/commix.git {cybersec_path}/commix")
-    print("Downloading cyberchef")
-    os.system(f"mkdir {cybersec_path}/cyberchef")
-    os.system(f"curl https://gchq.github.io/CyberChef/CyberChef_v10.8.2.zip -o {cybersec_path}/cyberchef/cyber.zip")
-    os.system(f"cd {cybersec_path}/cyberchef && unzip cyber.zip")
+    #print("Installing ohmyzsh")
+    #install_oh_my_zsh()
+    #print("Installing FZF")
+    #install_fzf()
+    #time.sleep(2)
+    #print("Setting commix, cyberchef and tor-browser")
+    #os.system(f"git clone https://github.com/commixproject/commix.git {cybersec_path}/commix")
+    #print("Downloading cyberchef")
+    #os.system(f"mkdir {cybersec_path}/cyberchef")
+    #os.system(f"curl https://gchq.github.io/CyberChef/CyberChef_v10.8.2.zip -o {cybersec_path}/cyberchef/cyber.zip")
+    #os.system(f"cd {cybersec_path}/cyberchef && unzip cyber.zip")
     print("Downloading paru")
-    if  install_paru:
-        set_tor()
+    if  install_paru():
+        #set_tor()
         print("Packages downloaded, lets install them...")
+        exit
         time.sleep(2)
         install_packages()
         print("Finished...")
@@ -110,4 +132,14 @@ def main():
     
     time.sleep(2)
     return "FINISHED maybe..."
+
+# Start script #
+if ( cur_user == 'root'):
+	raise Exception("This script can't be run as root")
+else:
+    print("Starting...")
+    try:
+        main()
+    except:
+        raise Exception("Something went wrong")
 
