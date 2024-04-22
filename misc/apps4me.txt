@@ -9,3 +9,5 @@ cyberchef -- offline webapp for different format functions
 ftkimager -- forensic imaging software
 dnSpy -- .NET debugger and assembly editor
 maltego -- Osint app
+etherpuppet -- voodoo doll ethernet tap
+scapy -- packet manipulation

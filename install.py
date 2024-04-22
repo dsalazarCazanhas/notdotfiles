@@ -1,13 +1,12 @@
 import subprocess
-import datetime
 import os
 import time
 
-
 packages = ['zip', 'unzip', 'alacritty-git', 'tmux-git', 'git', 'oh-my-zsh-git',
- 'shadowsocks-git', 'dbus-glib', 'nmap-git', 'wireshark-git', 'virtualbox-bin',
-  'virtualbox-bin-guest-iso', 'virtualbox-host-modules-arch', 'diffutils', 'util-linux',
-  'less', 'debugedit', 'fakeroot', 'gzip', 'binutils', 'bat', 'devtools', 'lsd']
+            'shadowsocks-git', 'dbus-glib', 'nmap-git', 'wireshark-git', 'virtualbox-bin',
+            'virtualbox-bin-guest-iso', 'virtualbox-host-modules-arch', 'diffutils',
+            'util-linux', 'less', 'debugedit', 'fakeroot', 'gzip', 'binutils',
+            'bat', 'devtools', 'lsd']
 cybersec_path = "/user/share/cybersec"
 # Paru -Sw packages download only
 install_dir = os.path.dirname(__file__)
@@ -17,12 +16,14 @@ cur_user = subprocess.check_output(['id', '-un']).decode('utf-8')
 cur_user_uid = int(subprocess.check_output(['id', '-u']))
 cur_user_gid = int(subprocess.check_output(['id', '-g']))
 
+
 def reboot():
-    print("All is up to date, a reboot is needed, consider it.\
-            I will create a cron file that will execute the script\
-                again after the reboot. So, reboot? (y/n)", x = input())
+    print("All is up to date, a reboot is needed, consider it.\n "
+          "I will create a cron file that will execute the script "
+          "again after the reboot. So, reboot?")
+    x = input("(x/y)")
     if x == 'y':
-        if subprocess.check_output('crontab', '-V'):
+        if subprocess.check_output(['crontab', '-V']):
             print('Cron is installed, lets go.')
             time.sleep(2)
             os.system(f"echo \"@reboot python {install_dir}/install.py | crontab -")
@@ -43,6 +44,7 @@ def reboot():
                 type f*** y or n.")
         reboot()
 
+
 def init():
     time.sleep(2)
     print("Executing first system upgrade.")
@@ -57,6 +59,7 @@ def init():
     except:
         raise Exception("There was an error on pacman update process")
         return False
+
 
 def install_paru():
     if subprocess.check_output(['git', '-v']):
@@ -87,6 +90,7 @@ def install_paru():
             return False
         return False
 
+
 def install_pkg(pkg: str):
     try:
         subprocess.run(['sudo', 'pacman', '-S', pkg, '--noconfirm', '--needed'])
@@ -94,6 +98,7 @@ def install_pkg(pkg: str):
     except:
         raise Exception(f"There was an error installing the package {pkg}")
         return False
+
 
 def set_tor():
     time.sleep(1)
@@ -104,6 +109,7 @@ def set_tor():
         raise Exception("Problemas en el metodo set tor")
         return False
 
+
 def install_oh_my_zsh():
     time.sleep(1)
     try:
@@ -112,13 +118,15 @@ def install_oh_my_zsh():
     except:
         return False
 
+
 def install_fzf():
     try:
         os.system("git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf && ~/.fzf/install")
         return True
     except:
         return False
-    
+
+
 def check_process_status(process_name: str):
     try:
         subprocess.check_output(['pgrep', process_name])
@@ -129,16 +137,17 @@ def check_process_status(process_name: str):
         print(f"The process {process_name} is not running")
         return False
 
+
 def install_packages():
     try:
         subprocess.run(['sudo', 'systemctl', 'restart', 'tor'])
-    except:
+    except subprocess.CalledProcessError:
         print("Tor isn't running")
         return 1
     if check_process_status('tor'):
         try:
-            subprocess.run(["proxychains4", "paru", "-S", "--noconfirm", ]\
-                + packages, check=True)
+            subprocess.run(["proxychains4", "paru", "-S", "--noconfirm", ] \
+                           + packages, check=True)
             return True
         except subprocess.CalledProcessError:
             print("There was an error downloading packages")
@@ -146,6 +155,7 @@ def install_packages():
     else:
         raise Exception("There is a problem with tor process")
         return False
+
 
 def main():
     print("Let's go")
@@ -157,8 +167,8 @@ def main():
         print("Cybersec path doesn't exists, creating it...")
         time.sleep(2)
         try:
-            subprocess.run(['sudo', 'mkdir', '/usr/share/cybersec'], check = True)
-            subprocess.run(['sudo', 'chown', f"{cur_user_uid}:{cur_user_gid}", '/usr/share/cybersec'], check = True)
+            subprocess.run(['sudo', 'mkdir', '/usr/share/cybersec'], check=True)
+            subprocess.run(['sudo', 'chown', f"{cur_user_uid}:{cur_user_gid}", '/usr/share/cybersec'], check=True)
             return True
         except subprocess.CalledProcessError:
             raise Exception(f"There was an error executing sudo")
@@ -180,7 +190,7 @@ def main():
     #os.system(f"curl https://gchq.github.io/CyberChef/CyberChef_v10.8.2.zip -o {cybersec_path}/cyberchef/cyber.zip")
     #os.system(f"cd {cybersec_path}/cyberchef && unzip cyber.zip")
     print("Downloading paru")
-    if  install_paru():
+    if install_paru():
         set_tor()
         time.sleep(2)
         try:
@@ -198,10 +208,10 @@ def main():
     time.sleep(2)
     print("Setting configuration files...")
     os.system(f"cp -rf {install_dir}/zsh_powerlevel/p10k.zsh {home_path}/.p10k.zsh;"
-        f"cp -rf {install_dir}/zsh_powerlevel/zshrc {home_path}/.zshrc;"
-        f"cp -rf {install_dir}/config/alacritty.toml {home_path}/.alacritty.toml;"
-        f"cp -rf {install_dir}/config/tmux.conf {home_path}/.tmux.conf;"
-        f"cp -rf {install_dir}/config/nvim {config_dir}")
+              f"cp -rf {install_dir}/zsh_powerlevel/zshrc {home_path}/.zshrc;"
+              f"cp -rf {install_dir}/config/alacritty.toml {home_path}/.alacritty.toml;"
+              f"cp -rf {install_dir}/config/tmux.conf {home_path}/.tmux.conf;"
+              f"cp -rf {install_dir}/config/nvim {config_dir}")
     os.system(f"cp -fr fonts {config_dir} && cd {config_dir}/fonts/Hack\
     && unzip Hack.zip && fc-cache -fv")
     os.system(f"git clone --depth=1 https://github.com/romkatv/powerlevel10k.git {home_path}/\
@@ -209,15 +219,17 @@ def main():
     time.sleep(2)
     return "FINISHED maybe..."
 
+
 def sweet_script_o_mine():
     print(f"Starting\
     Checking configs for {cur_user} user:\
         Install directory: {install_dir}\
-        Home directory: {home_dir}\
+        Home directory: {home_path}\
         Config user directory: {config_dir}")
     time.sleep(3)
-    print(f"The program needs that everything is updated,\
-        do you want me to do it? (y/n):", x = input())
+    print(f"The program needs that everything is updated, "
+          f"do you want me to do it?")
+    x = input("(y/n): ")
     if x == 'yes':
         try:
             if init():
@@ -232,14 +244,16 @@ def sweet_script_o_mine():
     else:
         print("Are you blind? Just type y or n")
 
+
+# Checking if the process is being executed after a reboot
 if subprocess.run(['crontab', '-l'], check=True):
     subprocess.run(['crontab', '-r'])
     main()
 else:
-    # Start script #
-    print("****OH...SWEET SCRIPT O' MINE!!****")
+    # Start the complete process #
+    print("**** OH...SWEET SCRIPT O' MINE!! ****")
     time.sleep(2)
-    if ( cur_user == 'root'):
+    if cur_user == 'root':
         raise Exception("This script can't be run as root")
         exit(51)
     else:
