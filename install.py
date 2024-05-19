@@ -17,11 +17,17 @@ cur_user_uid = int(subprocess.check_output(['id', '-u']))
 cur_user_gid = int(subprocess.check_output(['id', '-g']))
 
 
+def stop_on_error(excep: Exception, func_name: str):
+    print(f"The program will stop because there was an error"
+          f"on function '{func_name}' with error: {excep}")
+    exit()
+
+
 def reboot():
     print("All is up to date, a reboot is needed, consider it.\n "
           "I will create a cron file that will execute the script "
           "again after the reboot. So, reboot?")
-    x = input("(x/y)")
+    x = input("(x/y)").lower()
     if x == 'y':
         if subprocess.check_output(['crontab', '-V']):
             print('Cron is installed, lets go.')
@@ -35,14 +41,32 @@ def reboot():
                 install_pkg('cronie')
                 time.sleep(2)
                 reboot()
-            except Exception:
-                exit(51)
+            except Exception as e:
+                stop_on_error(e, reboot.__name__)
     elif x == 'n':
         return True
     else:
-        print("Really you need to go to a doctor to check your eyes\
-                type f*** y or n.")
+        print("Plz type y or n.")
         reboot()
+
+
+def install_pkg(pkg: str):
+    try:
+        subprocess.run(['sudo', 'pacman', '-S', pkg, '--noconfirm', '--needed'])
+        return True
+    except Exception as e:
+        stop_on_error(e, install_pkg.__name__)
+
+
+def check_process_status(process_name: str):
+    try:
+        subprocess.check_output(['pgrep', process_name])
+        time.sleep(2)
+        print(f"The process {process_name} is running, continuing")
+        return True
+    except subprocess.CalledProcessError:
+        print(f"The process {process_name} is not running")
+        return False
 
 
 def init():
@@ -55,10 +79,8 @@ def init():
         subprocess.run(['sudo', 'pacman', '-Syyu', '--noconfirm'], check=True)
         time.sleep(3)
         reboot()
-        return True
-    except:
-        raise Exception("There was an error on pacman update process")
-        return False
+    except Exception as e:
+        stop_on_error(e)
 
 
 def install_paru():
@@ -91,15 +113,6 @@ def install_paru():
         return False
 
 
-def install_pkg(pkg: str):
-    try:
-        subprocess.run(['sudo', 'pacman', '-S', pkg, '--noconfirm', '--needed'])
-        return True
-    except:
-        raise Exception(f"There was an error installing the package {pkg}")
-        return False
-
-
 def set_tor():
     time.sleep(1)
     try:
@@ -124,17 +137,6 @@ def install_fzf():
         os.system("git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf && ~/.fzf/install")
         return True
     except:
-        return False
-
-
-def check_process_status(process_name: str):
-    try:
-        subprocess.check_output(['pgrep', process_name])
-        time.sleep(2)
-        print(f"The process {process_name} is running, continuing")
-        return True
-    except subprocess.CalledProcessError:
-        print(f"The process {process_name} is not running")
         return False
 
 
@@ -229,14 +231,14 @@ def sweet_script_o_mine():
     time.sleep(3)
     print(f"The program needs that everything is updated, "
           f"do you want me to do it?")
-    x = input("(y/n): ")
-    if x == 'yes':
+    x = input("(y/n): ").lower()
+    if x == 'y':
         try:
             if init():
                 main()
-        except Exception:
-            return "There was an error on init() function"
-    elif x == 'no':
+        except Exception as e:
+            stop_on_error(e)
+    elif x == 'n':
         try:
             main()
         except:
@@ -255,10 +257,9 @@ else:
     time.sleep(2)
     if cur_user == 'root':
         raise Exception("This script can't be run as root")
-        exit(51)
     else:
         try:
             sweet_script_o_mine()
-        except Exception:
+        except Exception as e:
             print("There was an error executing the sweet script")
             exit(51)

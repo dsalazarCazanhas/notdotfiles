@@ -29,13 +29,19 @@ ssh -D LOCALPORT -N(just forward connections) -C(compress) user@ip
 ### Create a service ###
 [Unit]
 Description=Shadowsocks proxy server
+Requires
+After
 
 [Service]
+Type
+RemainAfterExit
 User=root
 Group=root
 Type=simple
+WorkingDirectory
 ExecStart=/usr/local/bin/ss-server -c /etc/shadowsocks/shadowsocks.json -a shadowsocks -v start
 ExecStop=/usr/local/bin/ss-server -c /etc/shadowsocks/shadowsocks.json -a shadowsocks -v stop
+TimeoutStartSec
 
 [Install]
 WantedBy=multi-user.target
