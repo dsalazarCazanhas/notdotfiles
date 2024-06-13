@@ -1,3 +1,8 @@
+### Create App Password on google Account ###
+Log in to the account, go to manage account, security, activate 2 steps authentication, and use this link if cannot see 
+Create app password function.
+https://myaccount.google.com/apppasswords
+
 ### A litle bit of NMAP ###
 a basic scan for all 65535 ports looking for open ones:
 nmap -p- --open -sS --min-rate 5000 -vvv -n -Pn {IP} -oG allPorts

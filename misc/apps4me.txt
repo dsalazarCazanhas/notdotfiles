@@ -11,3 +11,8 @@ dnSpy -- .NET debugger and assembly editor
 maltego -- Osint app
 etherpuppet -- voodoo doll ethernet tap
 scapy -- packet manipulation
+checkra1n -- for IOs jailbrake
+volatility and Lime -- for Memory extraction
+winhex -- disk editor for windows
+wxhexeditor -- A free hex editor / disk editor
+autopsy -- Digital forensics platform and graphical interface.
