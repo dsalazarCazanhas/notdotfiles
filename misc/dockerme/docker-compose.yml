@@ -1,0 +1,7 @@
+services:
+  thetest:
+    image: arch-testing:0.3
+    container_name: python-tests
+    volumes:
+      - /home/d4rks1d3r/Public/my_installpy:/mnt
+    tty: true

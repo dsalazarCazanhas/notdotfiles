@@ -1,3 +1,8 @@
+### OMG!! ###
+Use pipenv with poetry for python packaging-management and version control 
+-first use pipenv to create a virtual project inside the folder with a python version different that the system one
+-use poetry for packages control and use the env POETRY_VIRTUALENVS_PREFER_ACTIVE_PYTHON=True for this to work merely correctly; also need to activate the shell of pipenv and a child shell for poetry
+
 ### Create App Password on google Account ###
 Log in to the account, go to manage account, security, activate 2 steps authentication, and use this link if cannot see 
 Create app password function.

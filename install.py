@@ -2,13 +2,8 @@ import subprocess
 import os
 import time
 
-packages = ['zip', 'unzip', 'alacritty-git', 'tmux-git', 'git', 'oh-my-zsh-git',
-            'shadowsocks-git', 'dbus-glib', 'nmap-git', 'wireshark-git', 'virtualbox-bin',
-            'virtualbox-bin-guest-iso', 'virtualbox-host-modules-arch', 'diffutils',
-            'util-linux', 'less', 'debugedit', 'fakeroot', 'gzip', 'binutils',
-            'bat', 'devtools', 'lsd']
+packages = ['zip', 'unzip', 'alacritty', 'tmux', 'git', 'oh-my-zsh-git', 'dbus-glib', 'nmap-git', 'wireshark-git', 'virtualbox-bin', 'virtualbox-bin-guest-iso', 'virtualbox-host-modules-arch', 'diffutils', 'util-linux', 'less', 'debugedit', 'fakeroot', 'gzip', 'binutils', 'bat', 'devtools', 'lsd']
 cybersec_path = "/user/share/cybersec"
-# Paru -Sw packages download only
 install_dir = os.path.dirname(__file__)
 home_path = os.getenv('HOME')
 config_dir = f"{home_path}/.config"
