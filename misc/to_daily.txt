@@ -100,4 +100,9 @@ iface eth1 inet manual
   down ip link set $IFACE promisc off
   down ifconfig $IFACE down
 
+### On windows, free port range that are in use ###
+# discovery the ports
+netsh interface ipv4 show excludedportrange protocol=tcp
+# release the ports
+net stop winnat
 ### EOF ###
