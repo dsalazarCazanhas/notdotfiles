@@ -1,0 +1,88 @@
+font_family      HackNerdFont
+bold_font        auto
+italic_font      auto
+bold_italic_font auto
+
+font_size 12
+
+url_style curly
+detect_urls yes
+
+repain_delay 10
+input_delay 3
+sync_to_monitor yes
+# inactive_tab_background #e06c75
+active_tab_backgroubd #98c379
+# inactive_tab_foreground #000000
+tab_bar_color_margin black
+
+tab_bar_style powerline
+
+# disable_ligatures never
+
+# adjust_line_height  100%
+# modify_font strikethrough_position 12px
+
+# modify_font underline_position 3
+# modify_font underline_thickness 100%
+# cursor yellow
+# cursor_text_color red
+cursor_shape beam
+cursor_beam_thickness 2.0
+cursor_underline_thickness 2.2
+cursor_blink_interval 0.7
+cursor_stop_blinking_after 15.0
+
+scrollback_lines 20000
+
+open_url_modifiers cmd
+mouse_hide_wait 3.0
+
+enable_audio_bell no
+
+enabled_layouts Splits,Stack
+
+draw_minimal_borders yes
+
+inactive_text_alpha 0.8
+
+hide_window_decorations yes
+
+background_opacity 0.9
+background_blur 25
+
+allow_remote_control no
+
+shell_integration enabled no-title
+
+kitty_mod ctrl+shift
+
+map kitty_mod+left neighboring_window left
+map kitty_mod+right neighboring_window right
+map kitty_mod+up neighboring_window up
+map kitty_mod+down neighboring_window down
+
+map kitty_mod+v  paste_from_clipboard
+map kitty_mod+s  paste_from_selection
+
+map ctrl+enter new_tab_with_cwd
+map kitty_mod+alt+j move_window_forward
+map kitty_mod+alt+k move_window_backward
+
+map kitty_mod+o resize_window narrower
+map kitty_mod+y resize_window wider
+map kitty_mod+u resize_window taller
+map kitty_mod+i resize_window shorter
+
+map kitty_mod+]     next_tab
+map kitty_mod+[     previous_tab
+map kitty_mod+t     new_window_with_cwd
+map kitty_mod+r set_tab_title
+
+shell zsh
+
+
+# BEGIN_KITTY_THEME
+# Red Sands
+include current-theme.conf
+# END_KITTY_THEME
