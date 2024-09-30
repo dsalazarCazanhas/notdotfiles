@@ -7,6 +7,8 @@ fi
 
 export ZSH=/usr/share/oh-my-zsh
 
+cowsay -f eyes | toilet --metal -f term
+
 plugins=(git zsh-syntax-highlighting zsh-autosuggestions sudo python)
 
 if [ -f $ZSH/oh-my-zsh.sh ]; then
