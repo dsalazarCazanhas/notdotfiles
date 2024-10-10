@@ -1,6 +1,5 @@
 import secrets
 import string
-import random
 import subprocess
 
 letters = string.ascii_letters

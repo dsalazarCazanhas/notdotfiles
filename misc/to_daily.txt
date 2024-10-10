@@ -105,4 +105,16 @@ iface eth1 inet manual
 netsh interface ipv4 show excludedportrange protocol=tcp
 # release the ports
 net stop winnat
+
+### Use ssh keys with git ###
+generate the key pair with ssh
+ssh-keygen -t ed25519 -C "a comment"
+create a config file inside the .ssh folder that follows this schema:
+Host name-of-the-configuration
+  HostName  gitlab/github.com
+  User git
+  PreferredAuthentications publickey
+  IdentifyFile path/to/private/identity/ed25519
+add an ssh access key to the git account and paste the public ssh key.
+
 ### EOF ###

@@ -1,9 +1,11 @@
+# Install.py
+
 import subprocess
 import os
 import time
 
 packages = ['zip', 'unzip', 'alacritty', 'tmux', 'kitty', 'git', 'oh-my-zsh-git',
-            'dbus-glib', 'nmap-git', 'wireshark-git', 'virtualbox-bin',
+            'dbus-glib', 'nmap-git', 'wireshark-git', 'virtualbox-bin', 'byobu',
             'virtualbox-bin-guest-iso', 'virtualbox-host-modules-arch',
             'diffutils', 'util-linux', 'less', 'most', 'debugedit', 'fakeroot',
             'gzip', 'binutils', 'bat', 'devtools', 'lsd', 'cowsay', 'toilet']
@@ -14,7 +16,6 @@ cur_user = subprocess.check_output(['id', '-un']).decode('utf-8').strip()
 cur_user_uid = int(subprocess.check_output(['id', '-u']))
 cur_user_gid = int(subprocess.check_output(['id', '-g']))
 current_os = subprocess.check_output(["sed", "-n", "-e", "2p", "/etc/os-release"]).decode('utf-8').strip()
-cyber_path = f"{home_path}/.local/share/cybersec"
 start_title = """
 ***************************************************************************
 *                                                                         *
@@ -62,8 +63,8 @@ def reboot():
                 install_pkg('cronie')
                 time.sleep(2)
                 reboot()
-            except Exception as e:
-                stop_on_error(e, reboot.__name__)
+            except Exception:
+                raise
     elif x == 'n':
         return True
     else:
@@ -71,13 +72,12 @@ def reboot():
         reboot()
 
 
-def install_pkg(pkg: str):
+def install_pkg(pkg: str) -> bool:
     try:
         subprocess.run(['sudo', 'pacman', '-S', pkg, '--noconfirm', '--needed'])
         return True
-    except Exception as e:
-        stop_on_error(e, install_pkg.__name__)
-
+    except Exception:
+        raise Exception(f"There was a problem installing {pkg}")
 
 def init():
     time.sleep(2)
@@ -136,15 +136,23 @@ def set_tor():
 def install_oh_my_zsh():
     time.sleep(1)
     try:
-        os.system("sh -c '$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)'")
+        subprocess.run(["curl", "-fsSL", "https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh"])
         return True
-    except:
+    except Exception:
         return False
 
+def install_powerlevel10k():
+    time.sleep(1)
+    try:
+        subprocess.run(["git", "clone --depth=1", "https://github.com/romkatv/powerlevel10k.git", "~/.powerlevel10k"])
+        return True
+    except Exception:
+        raise Exception("There was a problem installing powerlevel")
 
 def install_fzf():
     try:
-        subprocess.run(["git", "clone --depth 1", "https://github.com/junegunn/fzf.git", "~/.fzf", "&&", "~/.fzf/install"])
+        # check if zsh is installed
+        subprocess.run(["git", "clone --depth 1", "https://github.com/junegunn/fzf.git", "~/.fzf"])
         return True
     except Exception:
         raise Exception("There was an error installing fzf")
@@ -158,7 +166,7 @@ def install_packages():
     except subprocess.CalledProcessError:
         raise
     try:
-        subprocess.check_output(["proxychains4", "paru", "-S", "--noconfirm", *packages])
+        subprocess.check_output(["proxychains4", "paru", "-S", "--noconfirm", "--needed", *packages])
         return True
     except subprocess.CalledProcessError as exc:
         print(f"There was an error downloading packages: {exc}")
@@ -171,37 +179,19 @@ def prepare():
     time.sleep(1)
     print("Preparing folders...")
     time.sleep(1)
-    if not os.path.exists(cyber_path):
-        print("Creating a folder to store cybersec tools.")
-        time.sleep(2)
-        try:
-            subprocess.run(["mkdir", "-p", f"{cyber_path}"], check=True)
-        except subprocess.CalledProcessError:
-            raise
-        except Exception:
-            raise
-    else:
-        print("Cybersec path already exists continuing")
-        time.sleep(2)
-        pass
-    time.sleep(2)
     print("Installing ohmyzsh")
     try:
         install_oh_my_zsh()
-    #print("Installing FZF")
-    #install_fzf()
-    #time.sleep(2)
-    #print("Setting commix, cyberchef and tor-browser")
-    #os.system(f"git clone https://github.com/commixproject/commix.git {cybersec_path}/commix")
-    #print("Downloading cyberchef")
-    #os.system(f"mkdir {cybersec_path}/cyberchef")
-    #os.system(f"curl https://gchq.github.io/CyberChef/CyberChef_v10.8.2.zip -o {cybersec_path}/cyberchef/cyber.zip")
-    #os.system(f"cd {cybersec_path}/cyberchef && unzip cyber.zip")
+    except Exception:
+        raise
+    print("Installing FZF")
     try:
         install_paru()
         time.sleep(2)
     except Exception:
         raise
+    print("Setting TOR")
+    time.sleep(2)
     try:
         set_tor()
         time.sleep(2)
@@ -214,16 +204,24 @@ def prepare():
     except subprocess.CalledProcessError:
         raise
     print("Setting configuration files...")
+    time.sleep(1)
+    try:
+        install_fzf()
+    except Exception:
+        raise Exception("There was a problem installing fzf")
+    try:
+        install_powerlevel10k()
+    except Exception:
+        raise
     time.sleep(2)
     os.system(f"cp -rf {install_dir}/zsh_powerlevel/p10k.zsh {home_path}/.p10k.zsh;"
               f"cp -rf {install_dir}/zsh_powerlevel/zshrc {home_path}/.zshrc;"
+              f"cp -rf {install_dir}/config/kitty {config_dir};"
               f"cp -rf {install_dir}/config/alacritty.toml {home_path}/.alacritty.toml;"
               f"cp -rf {install_dir}/config/tmux.conf {home_path}/.tmux.conf;"
               f"cp -rf {install_dir}/config/nvim {config_dir}")
     os.system(f"cp -fr fonts {config_dir} && cd {config_dir}/fonts/Hack\
     && unzip Hack.zip && fc-cache -fv")
-    os.system(f"git clone --depth=1 https://github.com/romkatv/powerlevel10k.git {home_path}/\
-        powerlevel10k")
     time.sleep(2)
     return "FINISHED maybe..."
 
@@ -244,21 +242,35 @@ def sweet_script_o_mine():
     time.sleep(3)
     print("The script needs that everything is updated, "
           "do you want me to do it?(It'll need root privileges)")
-    x = input("(y/n): ").lower()
+    x = input("(y/N): ").lower()
     if x == 'y':
         try:
-            if init():
-                main()
+            init()
         except Exception as e:
             stop_on_error(e)
-    elif x == 'n':
+    else:
         print("OK, let's install then the things that matters. \\o/ ...")
         time.sleep(1)
         prepare()
-    else:
-        print("Are you blind? Just type Y or N,\
-              lets start over.")
-        sweet_script_o_mine()
+
+
+def crontab():
+    print("Checking for crontab job...")
+    try:
+        subprocess.run(["crontab", "-V"])
+        if str(subprocess.run(['crontab', '-l']))[0] == 'n':
+            print("Reboot completed, resuming...")
+            time.sleep(3)
+            subprocess.run(['crontab', '-r'])
+            prepare()
+        else:
+            return False
+    except FileNotFoundError:
+        return False
+    except Exception:
+        raise
+    except KeyboardInterrupt:
+        raise
 
 
 def main():
@@ -271,29 +283,23 @@ def main():
     time.sleep(1)
     print('.')
     time.sleep(1)
-    #if 'arch' not in current_os.lower():
-    #    raise Exception(f"Sorry -->{current_os}<-- is not supported \nOther Systems that's not Arch Linux are not supported.....Yet :/ ")
+    if 'arch' not in current_os.lower():
+        raise Exception(f"Sorry -->{current_os}<-- is not supported \nOther Systems that's not Arch Linux are not supported.....Yet :/ ")
     if os.geteuid() == 0:
         raise Exception("This script can't be run as root")
     else:
         print("Checking if the process is being executed after a reboot")
         time.sleep(3)
         try:
-            if str(subprocess.run(['crontab', '-l']))[0] == 'n':
-                print("Reboot completed, resuming...")
-                time.sleep(3)
-                subprocess.run(['crontab', '-r'])
+            if crontab():
+                pass
             else:
-                # Start the complete process #
                 time.sleep(2)
                 print("Starting for the first time, lets go!!")
-                time.sleep(3)
-                print(start_title)
                 time.sleep(2)
-                try:
-                    sweet_script_o_mine()
-                except Exception:
-                    raise
+                print(start_title)
+                time.sleep(3)
+                sweet_script_o_mine()
         except Exception:
             raise
         except KeyboardInterrupt:
@@ -305,7 +311,11 @@ if __name__ == "__main__":
         main()
     except Exception as e:
         print(e)
+        exit(157)
+    except FileNotFoundError as fne:
+        print(e)
+        exit(1)
     except KeyboardInterrupt:
-        print("\nOK, that's fine, you can stop this at any time. The SUN will be PRAISED anyways \\o/.")
-
+        print("\nOK, that's fine, you can stop this at any time. The SUN will be PRAISED anyway \\o/.")
+        exit(0)
 

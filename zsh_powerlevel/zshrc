@@ -28,7 +28,7 @@ export HISTCONTROL=ignoreboth:erasedups
 
 export EDITOR='nvim'
 export LIST='bat'
-export CyberSec='/usr/share/cybersec/'
+export CyberSec='~/.local/share/cybersec/'
 
 if [ -d "$HOME/.bin" ] ;
   then PATH="$HOME/.bin:$PATH"
@@ -49,7 +49,7 @@ alias commix="python3 ${CyberSec}commix*/commix.py"
 alias cyberchef="firefox ${CyberSec}cyberchef/*.html"
 
 # Script alias
-alias givemeapass="python3 ~/.config/Scripts/PassGen.py"
+alias givemeapass="python3 ~/.local/share/PassGen.py"
 
 # Shadowsocks Server
 alias shadow_server="sslocal -c $HOME/.config/Shadowsocks_cfg/shadow_connection.json5"
@@ -102,9 +102,6 @@ alias rmpacmanlock="sudo rm /var/lib/pacman/db.lck"
 
 #continue download
 alias wget="wget -c"
-
-#copy with progress bar
-alias cp="pycp -i"
 
 #proccess
 alias psa="ps auxf"
