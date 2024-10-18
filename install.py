@@ -4,9 +4,8 @@ import subprocess
 import os
 import time
 
-packages = ['zip', 'unzip', 'alacritty', 'tmux', 'kitty', 'git', 'oh-my-zsh-git',
-            'dbus-glib', 'nmap-git', 'wireshark-git', 'virtualbox-bin', 'byobu',
-            'virtualbox-bin-guest-iso', 'virtualbox-host-modules-arch',
+packages = ['zip', 'unzip', 'alacritty', 'tmux', 'kitty',
+            'dbus-glib', 'nmap-git', 'wireshark-git', 'byobu',
             'diffutils', 'util-linux', 'less', 'most', 'debugedit', 'fakeroot',
             'gzip', 'binutils', 'bat', 'devtools', 'lsd', 'cowsay', 'toilet']
 install_dir = os.path.dirname(__file__)
@@ -45,33 +44,6 @@ start_title = """
 """
 
 
-def reboot():
-    print("All is up to date, a reboot is needed, consider it.\n "
-          "I will create a cron file that will execute the script "
-          "again after the reboot. So, reboot?")
-    x = input("(x/y)").lower()
-    if x == 'y':
-        if subprocess.check_output(['crontab', '-V']):
-            print('Cron is installed, lets go.')
-            time.sleep(2)
-            os.system(f"echo \"@reboot python {install_dir}/install.py | crontab -")
-            os.system("sudo systemctl enable crontab; sudo systemctl start crontab && \
-                sudo reboot")
-        else:
-            print("Crontab isn't installed, don't worry I'll take care")
-            try:
-                install_pkg('cronie')
-                time.sleep(2)
-                reboot()
-            except Exception:
-                raise
-    elif x == 'n':
-        return True
-    else:
-        print("Plz type y or n.")
-        reboot()
-
-
 def install_pkg(pkg: str) -> bool:
     try:
         subprocess.run(['sudo', 'pacman', '-S', pkg, '--noconfirm', '--needed'])
@@ -79,64 +51,13 @@ def install_pkg(pkg: str) -> bool:
     except Exception:
         raise Exception(f"There was a problem installing {pkg}")
 
-def init():
-    time.sleep(2)
-    print("Executing first system upgrade.")
-    time.sleep(1)
-    subprocess.run(["sudo", "pacman-key", "--init"])
-    subprocess.run(["sudo", "pacman-key", "--populate"])
-    try:
-        subprocess.run(["sudo", "pacman", "-Syyu", "--noconfirm"], check=True)
-        time.sleep(3)
-        reboot()
-    except Exception:
-        raise Exception("There was a problem in the first system upgrade.")
-
-
-def install_paru():
-    time.sleep(2)
-    print("Installing the beloved PARU...")
-    time.sleep(1)
-    if subprocess.check_output(['git', '-v']):
-        if subprocess.check_output(['paru', '-V']):
-            print("Paru is already installed.")
-            time.sleep(2)
-            return True
-        print("Git is installed, cloning paru...")
-        time.sleep(2)
-        try:
-            subprocess.run(["git", "-C", "/tmp/", "clone", "https://aur.archlinux.org/paru-bin"])
-            subprocess.run(["makepkg", "-sicD", "/tmp/paru-bin"])
-            time.sleep(2)
-            if subprocess.check_output(['paru', '-V']):
-                print("Paru was installed correctly.")
-                time.sleep(2)
-                return True
-        except Exception:
-            raise
-    else:
-        print("Git isn't installed, it will be installed")
-        try:
-            install_pkg('git')
-            if install_paru():
-                return True
-        except Exception:
-            raise
-
-
-def set_tor():
-    time.sleep(1)
-    try:
-        subprocess.run(['paru', '-S', 'proxychains', 'tor', 'torsocks', '--noconfirm', '--needed'])
-        return True
-    except Exception:
-        raise Exception("There was a problem installing TOR")
-
 
 def install_oh_my_zsh():
     time.sleep(1)
     try:
-        subprocess.run(["curl", "-fsSL", "https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh"])
+        subprocess.run(["wget", "https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh"])
+        subprocess.run(["sh", "install.sh", "--unattended"])
+        time.sleep(3)
         return True
     except Exception:
         return False
@@ -159,14 +80,9 @@ def install_fzf():
 
 
 def install_packages():
-    print("Let's install the things.")
     time.sleep(2)
     try:
-        subprocess.run(['sudo', 'systemctl', 'restart', 'tor'])
-    except subprocess.CalledProcessError:
-        raise
-    try:
-        subprocess.check_output(["proxychains4", "paru", "-S", "--noconfirm", "--needed", *packages])
+        subprocess.run(["paru", "-S", "--noconfirm", "--needed", *packages])
         return True
     except subprocess.CalledProcessError as exc:
         print(f"There was an error downloading packages: {exc}")
@@ -177,33 +93,18 @@ def install_packages():
 
 def prepare():
     time.sleep(1)
-    print("Preparing folders...")
-    time.sleep(1)
+    
+    try:
+        install_packages()
+    except Exception:
+        raise Exception("Problemas descargando los paquetes.")
+    
     print("Installing ohmyzsh")
     try:
         install_oh_my_zsh()
     except Exception:
         raise
-    print("Installing FZF")
-    try:
-        install_paru()
-        time.sleep(2)
-    except Exception:
-        raise
-    print("Setting TOR")
-    time.sleep(2)
-    try:
-        set_tor()
-        time.sleep(2)
-    except Exception:
-        raise
-    try:
-        install_packages()
-    except Exception:
-        raise Exception("Problemas descargando los paquetes.")
-    except subprocess.CalledProcessError:
-        raise
-    print("Setting configuration files...")
+    
     time.sleep(1)
     try:
         install_fzf()
@@ -240,36 +141,11 @@ def sweet_script_o_mine():
         Packages to install: {packages}
     """)
     time.sleep(3)
-    print("The script needs that everything is updated, "
-          "do you want me to do it?(It'll need root privileges)")
-    x = input("(y/N): ").lower()
-    if x == 'y':
-        try:
-            init()
-        except Exception as e:
-            stop_on_error(e)
-    else:
-        print("OK, let's install then the things that matters. \\o/ ...")
-        time.sleep(1)
-        prepare()
-
-
-def crontab():
-    print("Checking for crontab job...")
+    print("OK, let's install then the things that matters. \\o/ ...")
+    time.sleep(1)
     try:
-        subprocess.run(["crontab", "-V"])
-        if str(subprocess.run(['crontab', '-l']))[0] == 'n':
-            print("Reboot completed, resuming...")
-            time.sleep(3)
-            subprocess.run(['crontab', '-r'])
-            prepare()
-        else:
-            return False
-    except FileNotFoundError:
-        return False
+        prepare()
     except Exception:
-        raise
-    except KeyboardInterrupt:
         raise
 
 
@@ -288,18 +164,11 @@ def main():
     if os.geteuid() == 0:
         raise Exception("This script can't be run as root")
     else:
-        print("Checking if the process is being executed after a reboot")
-        time.sleep(3)
         try:
-            if crontab():
-                pass
-            else:
-                time.sleep(2)
-                print("Starting for the first time, lets go!!")
-                time.sleep(2)
-                print(start_title)
-                time.sleep(3)
-                sweet_script_o_mine()
+            time.sleep(2)
+            print(start_title)
+            time.sleep(3)
+            sweet_script_o_mine()
         except Exception:
             raise
         except KeyboardInterrupt:
@@ -312,9 +181,6 @@ if __name__ == "__main__":
     except Exception as e:
         print(e)
         exit(157)
-    except FileNotFoundError as fne:
-        print(e)
-        exit(1)
     except KeyboardInterrupt:
         print("\nOK, that's fine, you can stop this at any time. The SUN will be PRAISED anyway \\o/.")
         exit(0)
