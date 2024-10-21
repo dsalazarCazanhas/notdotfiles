@@ -5,7 +5,7 @@ import os
 import time
 
 packages = ['zip', 'unzip', 'alacritty', 'tmux', 'kitty',
-            'dbus-glib', 'nmap-git', 'wireshark-git', 'byobu',
+            'dbus-glib', 'byobu', 'autoreconf',
             'diffutils', 'util-linux', 'less', 'most', 'debugedit', 'fakeroot',
             'gzip', 'binutils', 'bat', 'devtools', 'lsd', 'cowsay', 'toilet']
 install_dir = os.path.dirname(__file__)
@@ -62,18 +62,19 @@ def install_oh_my_zsh():
     except Exception:
         return False
 
+
 def install_powerlevel10k():
     time.sleep(1)
     try:
-        subprocess.run(["git", "clone --depth=1", "https://github.com/romkatv/powerlevel10k.git", "~/.powerlevel10k"])
+        subprocess.run(["git", "clone" ,"--depth=1", "https://github.com/romkatv/powerlevel10k.git", "~/.powerlevel10k"])
         return True
     except Exception:
         raise Exception("There was a problem installing powerlevel")
 
+
 def install_fzf():
     try:
-        # check if zsh is installed
-        subprocess.run(["git", "clone --depth 1", "https://github.com/junegunn/fzf.git", "~/.fzf"])
+        subprocess.run(["git", "clone", "--depth 1", "https://github.com/junegunn/fzf.git", "~/.fzf"])
         return True
     except Exception:
         raise Exception("There was an error installing fzf")
@@ -97,19 +98,25 @@ def prepare():
     try:
         install_packages()
     except Exception:
-        raise Exception("Problemas descargando los paquetes.")
+        raise Exception("A problem downloading the packages has occured")
     
-    print("Installing ohmyzsh")
+    print("Installing OMZSH...")
+    time.sleep(2)
     try:
         install_oh_my_zsh()
     except Exception:
         raise
     
-    time.sleep(1)
+    print("Installing FZF...")
+    time.sleep(3)
     try:
         install_fzf()
     except Exception:
         raise Exception("There was a problem installing fzf")
+
+    
+    print("Installing PWRLVL10K...")
+    time.sleep(3)
     try:
         install_powerlevel10k()
     except Exception:
@@ -120,9 +127,8 @@ def prepare():
               f"cp -rf {install_dir}/config/kitty {config_dir};"
               f"cp -rf {install_dir}/config/alacritty.toml {home_path}/.alacritty.toml;"
               f"cp -rf {install_dir}/config/tmux.conf {home_path}/.tmux.conf;"
-              f"cp -rf {install_dir}/config/nvim {config_dir}")
-    os.system(f"cp -fr fonts {config_dir} && cd {config_dir}/fonts/Hack\
-    && unzip Hack.zip && fc-cache -fv")
+              f"cp -rf {install_dir}/config/nvim {config_dir};")
+    os.system(f"cp -fr fonts {config_dir} && cd {config_dir}/fonts/Hack && unzip Hack.zip && fc-cache -fv")
     time.sleep(2)
     return "FINISHED maybe..."
 
@@ -138,7 +144,7 @@ def sweet_script_o_mine():
         
         Config user directory: {config_dir}
 
-        Packages to install: {packages}
+        Packages to be installed: {packages}
     """)
     time.sleep(3)
     print("OK, let's install then the things that matters. \\o/ ...")
