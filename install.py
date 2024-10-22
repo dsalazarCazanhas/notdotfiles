@@ -5,7 +5,7 @@ import os
 import time
 
 packages = ['zip', 'unzip', 'alacritty', 'tmux', 'kitty',
-            'dbus-glib', 'byobu', 'autoreconf',
+            'dbus-glib', 'byobu', 'zsh',
             'diffutils', 'util-linux', 'less', 'most', 'debugedit', 'fakeroot',
             'gzip', 'binutils', 'bat', 'devtools', 'lsd', 'cowsay', 'toilet']
 install_dir = os.path.dirname(__file__)
@@ -59,14 +59,14 @@ def install_oh_my_zsh():
         subprocess.run(["sh", "install.sh", "--unattended"])
         time.sleep(3)
         return True
-    except Exception:
-        return False
+    except Exception as e:
+        raise Exception(f"Problem installing oh-my-zsh: {e}")
 
 
 def install_powerlevel10k():
     time.sleep(1)
     try:
-        subprocess.run(["git", "clone" ,"--depth=1", "https://github.com/romkatv/powerlevel10k.git", "~/.powerlevel10k"])
+        subprocess.run(["git", "clone" ,"--depth", "1", "https://github.com/romkatv/powerlevel10k.git", "~/.powerlevel10k"])
         return True
     except Exception:
         raise Exception("There was a problem installing powerlevel")
@@ -74,7 +74,7 @@ def install_powerlevel10k():
 
 def install_fzf():
     try:
-        subprocess.run(["git", "clone", "--depth 1", "https://github.com/junegunn/fzf.git", "~/.fzf"])
+        subprocess.run(["git", "clone", "--depth", "1", "https://github.com/junegunn/fzf.git", "~/.fzf"])
         return True
     except Exception:
         raise Exception("There was an error installing fzf")
@@ -100,7 +100,7 @@ def prepare():
     except Exception:
         raise Exception("A problem downloading the packages has occured")
     
-    print("Installing OMZSH...")
+    print("Installing OHMZSH...")
     time.sleep(2)
     try:
         install_oh_my_zsh()
