@@ -34,7 +34,7 @@ curl -s 'https://api.github.com/users/lambda' | jq -r '.name'
 python -c 'import pty; pty.spawn("/bin/bash")'
 
 ### SSH forwarding ###
-ssh -D LOCALPORT -N(just forward connections) -C(compress) user@ip
+ssh -D [LOCALADDR:]LOCALPORT -N(just forward connections) -C(compress(better-on-slow-networks)) user@ip
 
 ### Create a service ###
 [Unit]
