@@ -33,7 +33,7 @@ curl -s 'https://api.github.com/users/lambda' | jq -r '.name'
 ### Python PSEUDOshell ###
 python -c 'import pty; pty.spawn("/bin/bash")'
 
-### SSH server ###
+### SSH forwarding ###
 ssh -D LOCALPORT -N(just forward connections) -C(compress) user@ip
 
 ### Create a service ###
@@ -106,7 +106,7 @@ netsh interface ipv4 show excludedportrange protocol=tcp
 # release the ports
 net stop winnat
 
-### Use ssh keys with git ###
+### Use ssh keys with ssh-config-file ###
 generate the key pair with ssh
 ssh-keygen -t ed25519 -C "a comment"
 create a config file inside the .ssh folder that follows this schema:
