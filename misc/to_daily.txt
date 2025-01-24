@@ -114,7 +114,7 @@ Host name-of-the-configuration
   HostName  gitlab/github.com
   User git
   PreferredAuthentications publickey
-  IdentifyFile path/to/private/identity/ed25519
+  IdentityFile path/to/private/identity/ed25519
 add an ssh access key to the git account and paste the public ssh key.
 
 ### EOF ###
