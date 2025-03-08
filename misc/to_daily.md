@@ -137,4 +137,9 @@ Configure the remote host with the public ssh key generated
 `log /etc/openvpn/openvpn.log`
 
 
+### Check windows version from an ISO
+- run:
+  `DISM /get-wiminfo /wimfile:"X:\sources\install.wim" /index:1`
+`X` is the driver letter
+
 ### EOF ###
