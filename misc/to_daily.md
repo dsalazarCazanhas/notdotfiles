@@ -35,7 +35,7 @@
 ### SSH forwarding
 - `ssh -D [LOCALADDR:]LOCALPORT -N(just forward connections) -C(compress(better-on-slow-networks)) user@ip`
 
-### Create a service
+### Create a service in linux
 ```
 [Unit]
 Description=Shadowsocks proxy server
@@ -141,5 +141,22 @@ Configure the remote host with the public ssh key generated
 - run:
   `DISM /get-wiminfo /wimfile:"X:\sources\install.wim" /index:1`
 `X` is the driver letter
+
+
+### Windows drivers backup-restore
+-> [DOCS](https://www.tenforums.com/tutorials/68426-backup-restore-device-drivers-windows-10-a.html)
+# Back Up All Device Drivers in Command Prompt
+`dism /online /export-driver /destination:"full path of folder"`
+
+# Back Up All Device Drivers in PowerShell
+`Export-WindowsDriver -Online -Destination "full path of folder"`
+
+# Restore a Device Driver Backup in Device Manager
+
+# Restore All Device Drivers in Command Prompt
+`pnputil /add-driver "full path of folder\*.inf" /subdirs /install /reboot`
+
+
+
 
 ### EOF ###
