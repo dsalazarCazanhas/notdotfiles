@@ -1,4 +1,4 @@
-# My shortcuts
+# My shortcuts xd
 
 ## Alacritty-Temux
 alacritty -e tmux
