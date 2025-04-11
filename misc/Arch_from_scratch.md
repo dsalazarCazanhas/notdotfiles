@@ -29,18 +29,20 @@ pacman-key –init && pacman-key –populate
 ```
 
 **Se procede a instalar el sistema...**
-`pacstrap /mnt linux linux-headers linux-firmware base base-devel grub networkmanager wpa_supplicant git vim nano wget man-db man-pages texinfo`
+`pacstrap /mnt linux linux-headers linux-firmware base base-devel grub networkmanager wpa_supplicant git efibootmgr vim nano wget man-db man-pages texinfo`
 *Al terminar la instalación se graba la tabla de particiones*
 `genfstab -U /mnt >> /mnt/etc/fstab`
 *Se define el nombre del host*
 `echo ‘(el nombre del pc)’ >> /mnt/etc/hostname`
 Se accede al entorno acabado de instalar como root usando `arch-chroot /mnt`
 Time zone: `ln -sf /usr/share/zoneinfo/Region/City /etc/localtime`
-`Hwclock –systohc` para crear */etc/adjtime*
+`Hwclock –-systohc` para crear */etc/adjtime*
 Editar */etc/locale.gen* y descomentar `en_US.UTF-8 UTF-8`, luego ejecutar `locale-gen`
 Crear */etc/locale.conf* y agregar `LANG=en_US.UTF-8`
-Para el teclado */etc/vconsole.conf*, `KEYMAP=uk`
-para listar los mapas de teclado disponibles `localectl list-keymaps` 
+
+Para listar los mapas de teclado disponibles `localectl list-keymaps` 
+Para el teclado */etc/vconsole.conf*, `KEYMAP=en`
+
 
 **Passwords**
 Si queremos agregar usuario con privilegios de root `useradd -m( para crearle un home) ‘el nombre del usuario’ -G Wheel`
@@ -50,7 +52,7 @@ Se le asigna el password al nuevo usuario
 
 Se configura el arranque con:
 - para UEFI `grub-install –target=x86_64-efi /dev/sda` 
-- se configuran las grub con `grub-mkconfig -o /boot/grub/grub.cfg`
+- se configuran las grub con `grub-mkconfig -o /boot/efi/grub/grub.cfg`
 *Salimos del entorno root con exit* Y reiniciamos para entrar al sistema operativo que acabamos de instalar. Recordar retirar la imagen de arranque de arch.
 > [!NOTE]
 > **PARU** `git clone https://aur.archlinux.org/paru-bin && cd paru-bin && makepkg -sic`
