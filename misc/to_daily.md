@@ -199,7 +199,12 @@ Export-WindowsDriver -Online -Destination "full path of folder"
 pnputil /add-driver "full path of folder\*.inf" /subdirs /install /reboot
 ```
 
+---
 
+# List ports in use in linux
+```shell
+sudo lsof -i -P -n
+```
 
 
 ### EOF ###

@@ -78,7 +78,7 @@ alias fullup='sudo pacman -Syyu'
 alias paclean="sudo pacman -Qtdq | sudo ifne pacman -Rns - 2>/dev/null"
 
 #network
-alias ports='ss -tulw'
+alias ports='sudo lsof -i -P -n'
 alias myIp='curl https://api.ipify.org\?format\=json'
 
 #fix obvious typo's
