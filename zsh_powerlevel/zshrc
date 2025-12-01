@@ -1,19 +1,15 @@
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
-#typeset -g POWERLEVEL9K_INSTANT_PROMPT=quiet
-
 #########################################################################################
 
-export ZSH=/usr/share/oh-my-zsh
+typeset -g POWERLEVEL9K_INSTANT_PROMPT=quiet
 
-cowsay -f eyes | toilet --metal -f term
+export ZSH="$HOME/.oh-my-zsh"
+ZSH_THEME="powerlevel10k/powerlevel10k"
+source $ZSH/oh-my-zsh.sh
+plugins=(git sudo)
 
-plugins=(git zsh-syntax-highlighting zsh-autosuggestions sudo python)
-
-if [ -f $ZSH/oh-my-zsh.sh ]; then
-  source $ZSH/oh-my-zsh.sh
-fi
 
 ####   SETTINGS   ####
 DISABLE_AUTO_TITLE="true"
@@ -28,7 +24,6 @@ export HISTCONTROL=ignoreboth:erasedups
 
 export EDITOR='nvim'
 export LIST='bat'
-export CyberSec='~/.local/share/cybersec/'
 
 if [ -d "$HOME/.bin" ] ;
   then PATH="$HOME/.bin:$PATH"
@@ -38,29 +33,9 @@ if [ -d "$HOME/.local/bin" ] ;
   then PATH="$HOME/.local/bin:$PATH"
 fi
 
-source $HOME/.powerlevel10k/powerlevel10k.zsh-theme
-
 ### ALIASES ###
 
 alias path="echo $PATH | lolcat"
-
-# CyberSec apps
-alias commix="python3 ${CyberSec}commix*/commix.py"
-alias cyberchef="firefox ${CyberSec}cyberchef/*.html"
-
-# Script alias
-alias givemeapass="python3 ~/.local/share/PassGen.py"
-
-# Shadowsocks Server
-alias shadow_server="sslocal -c $HOME/.config/Shadowsocks_cfg/shadow_connection.json5"
-alias shadow_proxy="export HTTP_PROXY="socks5h://127.0.0.1:8357";export http_proxy="socks5h://127.0.0.1:8357";export HTTPS_PROXY="socks5h://127.0.0.1:8357";export https_proxy="socks5h://127.0.0.1:8357""
-
-# Tor Server
-alias torb="sudo systemctl restart tor && cd ${CyberSec}tor-browser && ./start-tor-browser.desktop --verbose; cd"
-alias tor_proxy="export http_proxy='socks5h://127.0.0.1:9050';export https_proxy='socks5h://127.0.0.1:9050'"
-
-#Virtualbox
-alias vbox='VBoxManage'
 
 #list
 alias ls='lsd --color=auto'
@@ -71,11 +46,6 @@ alias l='lsd'
 #editing
 alias cat=$LIST
 alias vim=$EDITOR
-
-#pacman easy
-alias pacman='sudo pacman -S'
-alias fullup='sudo pacman -Syyu'
-alias paclean="sudo pacman -Qtdq | sudo ifne pacman -Rns - 2>/dev/null"
 
 #network
 alias ports='sudo lsof -i -P -n'
@@ -95,10 +65,6 @@ alias df='df -h'
 #keyboard
 alias give-me-qwerty-es="sudo localectl set-x11-keymap es"
 alias give-me-qwerty-us="sudo localectl set-x11-keymap us"
-
-#pacman unlock
-alias unlock="sudo rm /var/lib/pacman/db.lck"
-alias rmpacmanlock="sudo rm /var/lib/pacman/db.lck"
 
 #continue download
 alias wget="wget -c"
@@ -177,16 +143,11 @@ ex ()
     echo "'$1' is not a valid file"
   fi
 }
+# ~/.zshrc
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
-if [ -d $HOME/.nvm ] ; then
-	export NVM_DIR="$HOME/.nvm"
-	[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-	[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-fi
-
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-
-true
+source ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
+source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+source ~/.oh-my-zsh/custom/plugins/zsh-history-substring-search/zsh-history-substring-search.zsh

@@ -4,7 +4,7 @@ import subprocess
 import os
 import time
 
-packages = ['zip', 'unzip', 'alacritty', 'tmux', 'kitty',
+packages = ['zip', 'unzip', 'alacritty',
             'dbus-glib', 'byobu', 'zsh',
             'diffutils', 'util-linux', 'less', 'most', 'debugedit', 'fakeroot',
             'gzip', 'binutils', 'bat', 'devtools', 'lsd', 'cowsay', 'toilet']
