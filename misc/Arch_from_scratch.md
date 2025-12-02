@@ -16,7 +16,7 @@ Se asigna la partición swap con `mkswap /dev/sdax` que sería la partición swa
 **Verificar las particiones usando lsblk**
 Montar las particiones pertinentes usando mount
 La partición del sistema `mount /dev/sdax /mnt`; 
-la carpeta boot: `mount –mkdir /dev/efi_partition mnt/`
+la carpeta boot: `mount -m /dev/efi_partition mnt/boot/efi`
 
 **Lo siguiente es verificar que se tenga internet.**
 Si es ethernet es asegurarse con ping a Google si tiene internet, en caso de WiFi usar la herramienta por defecto que trae arch con 
