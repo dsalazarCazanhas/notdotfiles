@@ -45,7 +45,7 @@ Para el teclado */etc/vconsole.conf*, `KEYMAP=en`
 
 
 **Passwords**
-Si queremos agregar usuario con privilegios de root `useradd -m( para crearle un home) ‘el nombre del usuario’ -G Wheel`
+Si queremos agregar usuario con privilegios de root `useradd -m( para crearle un home) ‘el nombre del usuario’ -G wheel`
 activar el grupo wheel en */etc/sudoers*, buscar la línea donde esta `# %wheel` y quitarle el `#` para activar el grupo, los mas avanzados usaran sudoers.d.
 Se le asigna el password al nuevo usuario 
 `passwd ‘usuario’`
