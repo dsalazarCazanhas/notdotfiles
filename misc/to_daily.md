@@ -148,13 +148,15 @@ iface eth1 inet manual
 # Use ssh keys with ssh-config-file
 - generate the key pair with ssh
 `ssh-keygen -t ed25519 -C "a comment"`
-- create a config file inside the .ssh folder that follows this schema:
+- create the `config` file inside the .ssh folder that follows this schema:
 ```
 Host name-of-the-configuration
-  HostName  gitlab/github.com/ip/hostname
-  User git/remote-host-username
+  HostName remote domain/ip
+  User remote-host-username
   PreferredAuthentications publickey
-  IdentifyFile path/to/private/identity/file
+  AddKeysToAgent yes
+  IdentitiesOnly yes
+  IdentityFile ~/.ssh/ed25519 -- (or the file name)
 ```
 Configure the remote host with the public ssh key generated
 
