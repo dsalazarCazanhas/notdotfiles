@@ -29,16 +29,16 @@ pacman-key –init && pacman-key –populate
 ```
 
 **Se procede a instalar el sistema...**
-`pacstrap /mnt linux linux-headers linux-firmware base base-devel grub networkmanager wpa_supplicant git efibootmgr vim nano wget man-db man-pages texinfo`
-*Al terminar la instalación se graba la tabla de particiones*
+- `pacstrap /mnt linux linux-headers linux-firmware base base-devel grub networkmanager wpa_supplicant git efibootmgr vim nano wget man-db man-pages texinfo`
+- *Al terminar la instalación se graba la tabla de particiones*
 `genfstab -U /mnt >> /mnt/etc/fstab`
-*Se define el nombre del host*
-`echo ‘(el nombre del pc)’ >> /mnt/etc/hostname`
-Se accede al entorno acabado de instalar como root usando `arch-chroot /mnt`
-Time zone: `ln -sf /usr/share/zoneinfo/Region/City /etc/localtime`
-`Hwclock –-systohc` para crear */etc/adjtime*
-Editar */etc/locale.gen* y descomentar `en_US.UTF-8 UTF-8`, luego ejecutar `locale-gen`
-Crear */etc/locale.conf* y agregar `LANG=en_US.UTF-8`
+- *Se define el nombre del host*
+`echo ‘el nombre del pc’ >> /mnt/etc/hostname`
+- Se accede al entorno acabado de instalar como root usando `arch-chroot /mnt`
+- Time zone: `ln -sf /usr/share/zoneinfo/Region/City /etc/localtime`
+`hwclock --systohc` para crear */etc/adjtime*
+- Editar */etc/locale.gen* y descomentar `en_US.UTF-8 UTF-8`, luego ejecutar `locale-gen`
+- Crear */etc/locale.conf* y agregar `LANG=en_US.UTF-8`
 
 Para listar los mapas de teclado disponibles `localectl list-keymaps` 
 Para el teclado */etc/vconsole.conf*, `KEYMAP=en`
