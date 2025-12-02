@@ -55,5 +55,5 @@ Se configura el arranque con:
 - se configuran las grub con `grub-mkconfig -o /boot/grub/grub.cfg`
 *Salimos del entorno root con exit* Y reiniciamos para entrar al sistema operativo que acabamos de instalar. Recordar retirar la imagen de arranque de arch.
 > [!NOTE]
-> **PARU** `git clone https://aur.archlinux.org/paru-bin && cd paru-bin && makepkg -sic`
-> **Activar NetworkManager luego de reiniciar** `sudo systemctl enable NetworkManager && sudo systemctl start NetworkManager`
+> - **PARU** `git clone https://aur.archlinux.org/paru-bin && cd paru-bin && makepkg -sic`
+> - **Activar NetworkManager luego de reiniciar** `sudo systemctl enable NetworkManager && sudo systemctl start NetworkManager`
