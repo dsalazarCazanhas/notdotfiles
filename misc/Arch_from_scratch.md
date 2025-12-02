@@ -51,8 +51,8 @@ Se le asigna el password al nuevo usuario
 `passwd ‘usuario’`
 
 Se configura el arranque con:
-- para UEFI `grub-install –target=x86_64-efi /dev/sda` 
-- se configuran las grub con `grub-mkconfig -o /boot/efi/grub/grub.cfg`
+- para UEFI `grub-install --target=x86_64-efi /dev/sdx`(donde este el dir efi) 
+- se configuran las grub con `grub-mkconfig -o /boot/grub/grub.cfg`
 *Salimos del entorno root con exit* Y reiniciamos para entrar al sistema operativo que acabamos de instalar. Recordar retirar la imagen de arranque de arch.
 > [!NOTE]
 > **PARU** `git clone https://aur.archlinux.org/paru-bin && cd paru-bin && makepkg -sic`
