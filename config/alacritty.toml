@@ -1,3 +1,5 @@
+[env]
+TERM = "xterm-256color"
 
 [cursor]
 blink_interval = 550
@@ -6,7 +8,7 @@ thickness = 0.1
 vi_mode_style = "Block"
 
 [cursor.style]
-shape = "Beam"
+shape = "Block"
 blinking = "On"
 
 [window]
@@ -45,5 +47,7 @@ lines = 34
 x = 15
 y = 15
 
-[terminal]
-shell = "/usr/bin/zsh"
+[terminal.shell]
+program = "/usr/bin/zsh"
+args = ["-l"]
+
