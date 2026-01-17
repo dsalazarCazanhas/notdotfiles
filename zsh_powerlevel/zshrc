@@ -1,3 +1,4 @@
+
 # --- Powerlevel10k instant prompt (debe ir primero) ---
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
@@ -6,7 +7,6 @@ typeset -g POWERLEVEL9K_INSTANT_PROMPT=quiet
 
 # --- No cargar el resto si no es interactivo ---
 [[ -o interactive ]] || return
-
 # --- Oh-My-Zsh (opciones deben ir ANTES del source) ---
 export ZSH="$HOME/.oh-my-zsh"
 ZSH_THEME="powerlevel10k/powerlevel10k"
@@ -108,3 +108,8 @@ ex() {
 
 # p10k config al final
 [[ -f ~/.p10k.zsh ]] && source ~/.p10k.zsh
+
+if [ -f ~/.dircolors ]; then
+  eval "$(dircolors ~/.dircolors)"
+fi
+
