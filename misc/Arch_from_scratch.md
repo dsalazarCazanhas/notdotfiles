@@ -51,7 +51,7 @@ Se le asigna el password al nuevo usuario
 `passwd ‘usuario’`
 
 Se configura el arranque con:
-- para UEFI `grub-install --target=x86_64-efi /dev/sdx`(donde este el dir efi) 
+- para UEFI `grub-install --target=x86_64-efi /dev/sdx` --bootloader-id=GRUB, si no lo encuentra, agregar `--efi-directory=/efi` 
 - se configuran las grub con `grub-mkconfig -o /boot/grub/grub.cfg`
 *Salimos del entorno root con exit* Y reiniciamos para entrar al sistema operativo que acabamos de instalar. Recordar retirar la imagen de arranque de arch.
 > [!NOTE]
