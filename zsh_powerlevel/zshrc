@@ -47,7 +47,7 @@ alias ll='lsd -alFh --group-directories-first'
 alias l='lsd'
 
 alias cat='bat'
-alias vim='nvim'
+alias vim='lvim'
 
 alias ports='sudo lsof -i -P -n'
 alias myIp='curl -s "https://api.ipify.org?format=json"'
@@ -113,3 +113,7 @@ if [ -f ~/.dircolors ]; then
   eval "$(dircolors ~/.dircolors)"
 fi
 
+# This loads nvm bash_completion
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
