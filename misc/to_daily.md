@@ -51,8 +51,14 @@
 ---
 
 # SSH forwarding
-- `ssh -D [LOCALADDR:]LOCALPORT -N(just forward connections) -C(compress(better-on-slow-networks)) user@ip`
-
+## SOCKS
+- `ssh -D [LOCALADDR:]LOCALPORT -N -C -i KEY user@host`
+> -D: proxy SOCKS local
+> -N: solo túnel, sin shell remoto
+> -C: compresión
+> -i: clave privada
+## HTTP
+- `ssh -L [LOCALADDR:]LOCALPORT:REMOTEADDR:REMOTEPORT -N -C user@host`
 ---
 
 # Create a service in linux
