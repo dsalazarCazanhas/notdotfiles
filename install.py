@@ -33,6 +33,11 @@ FZF_DIR = HOME_PATH / '.fzf'
 P10K_DIR = HOME_PATH / '.powerlevel10k'
 NVIM_DIR = CONFIG_DIR / 'nvim'
 ALACRITTY_THEMES_DIR = CONFIG_DIR / 'alacritty' / 'themes'
+ZSH_PLUGINS_DIR = ZSH_DIR / 'custom' / 'plugins'
+ZSH_PLUGINS = {
+    'zsh-autosuggestions': 'https://github.com/zsh-users/zsh-autosuggestions.git',
+    'zsh-syntax-highlighting': 'https://github.com/zsh-users/zsh-syntax-highlighting.git',
+}
 
 # System info
 CUR_USER = subprocess.check_output(['id', '-un'], text=True).strip()
@@ -168,6 +173,25 @@ def install_fzf() -> bool:
     return success
 
 
+def install_zsh_plugins() -> bool:
+    """Clone the Oh My Zsh custom plugins used by the zshrc plugins list."""
+    for name, url in ZSH_PLUGINS.items():
+        plugin_dir = ZSH_PLUGINS_DIR / name
+        if plugin_dir.exists():
+            logger.info(f"{name} already installed, skipping...")
+            continue
+
+        logger.info(f"Installing {name}...")
+        success, _ = run_command(
+            ['git', 'clone', '--depth', '1', url, str(plugin_dir)],
+            f"Failed to install {name}"
+        )
+        if not success:
+            return False
+
+    return True
+
+
 def install_lazyvim() -> bool:
     """Install LazyVim starter config if not already installed."""
     if NVIM_DIR.exists():
@@ -287,6 +311,7 @@ def prepare() -> bool:
         ("Updating system", update_system),
         ("Installing packages", install_packages),
         ("Installing Oh My Zsh", install_oh_my_zsh),
+        ("Installing zsh plugins", install_zsh_plugins),
         ("Installing fzf", install_fzf),
         ("Installing Powerlevel10k", install_powerlevel10k),
         ("Installing LazyVim", install_lazyvim),
