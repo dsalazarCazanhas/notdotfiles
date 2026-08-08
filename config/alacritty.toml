@@ -23,7 +23,7 @@ builtin_box_drawing = true
 size = 12
 
 [font.normal]
-family = "HackNerdFont"
+family = "Hack Nerd Font Mono"
 style = "Regular"
 
 [selection]

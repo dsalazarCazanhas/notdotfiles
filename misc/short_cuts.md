@@ -1,7 +1,10 @@
 # My shortcuts xd
 
-## Alacritty-Temux
-alacritty -e tmux
+## Enable tmux backed
+> `byobu-select-backend'
+> [tmux]
+### Alacritty-Temux
+alacritty -e "byobu"
 
-## Kitty-Byobu
-kitty --single-instance sh -c "byobu-tmux"
+### Kitty-Byobu
+kitty --single-instance sh -c "byobu"

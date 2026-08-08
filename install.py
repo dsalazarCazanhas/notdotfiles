@@ -1,12 +1,11 @@
 # Install.py - Arch Linux Configuration Script
 
-import subprocess
-import os
-import sys
 import logging
+import os
 import shutil
+import subprocess
+import sys
 from pathlib import Path
-from typing import List, Tuple
 
 # Configure logging
 logging.basicConfig(
@@ -20,7 +19,9 @@ logger = logging.getLogger(__name__)
 PACKAGES = [
     'zip', 'unzip', 'alacritty', 'dbus-glib', 'byobu', 'zsh',
     'diffutils', 'util-linux', 'less', 'most', 'debugedit', 'fakeroot',
-    'gzip', 'binutils', 'bat', 'devtools', 'lsd', 'cowsay', 'toilet'
+    'gzip', 'binutils', 'bat', 'devtools', 'lsd', 'cowsay', 'toilet',
+    'git', 'lolcat', 'ttf-hack-nerd', 'neovim', 'ripgrep', 'fd', 'lazygit',
+    'scrub', 'hw-probe'
 ]
 
 # Paths
@@ -30,6 +31,8 @@ CONFIG_DIR = HOME_PATH / '.config'
 ZSH_DIR = HOME_PATH / '.oh-my-zsh'
 FZF_DIR = HOME_PATH / '.fzf'
 P10K_DIR = HOME_PATH / '.powerlevel10k'
+NVIM_DIR = CONFIG_DIR / 'nvim'
+ALACRITTY_THEMES_DIR = CONFIG_DIR / 'alacritty' / 'themes'
 
 # System info
 CUR_USER = subprocess.check_output(['id', '-un'], text=True).strip()
@@ -71,7 +74,7 @@ def check_os() -> bool:
         return False
 
 
-def run_command(cmd: List[str], error_msg: str, check: bool = True) -> Tuple[bool, str]:
+def run_command(cmd: list[str], error_msg: str, check: bool = True) -> tuple[bool, str]:
     """Execute a command and handle errors consistently."""
     try:
         result = subprocess.run(
@@ -84,19 +87,9 @@ def run_command(cmd: List[str], error_msg: str, check: bool = True) -> Tuple[boo
     except subprocess.CalledProcessError as e:
         logger.error(f"{error_msg}: {e.stderr}")
         return False, e.stderr
-    except Exception as e:
-        logger.error(f"{error_msg}: {str(e)}")
+    except OSError as e:
+        logger.error(f"{error_msg}: {e}")
         return False, str(e)
-
-
-def install_pkg(pkg: str) -> bool:
-    """Install a single package using pacman."""
-    logger.info(f"Installing {pkg}...")
-    success, _ = run_command(
-        ['sudo', 'pacman', '-S', pkg, '--noconfirm', '--needed'],
-        f"Failed to install {pkg}"
-    )
-    return success
 
 
 def install_oh_my_zsh() -> bool:
@@ -107,12 +100,12 @@ def install_oh_my_zsh() -> bool:
     
     logger.info("Installing Oh My Zsh...")
     install_script = HOME_PATH / 'install.sh'
-    
+
     try:
         # Download install script
         success, _ = run_command(
-            ['wget', 'https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh',
-             '-O', str(install_script)],
+            ['curl', '-fsSL', 'https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh',
+             '-o', str(install_script)],
             "Failed to download Oh My Zsh installer"
         )
         if not success:
@@ -129,7 +122,7 @@ def install_oh_my_zsh() -> bool:
             install_script.unlink()
         
         return success
-    except Exception as e:
+    except OSError as e:
         logger.error(f"Error installing Oh My Zsh: {e}")
         return False
 
@@ -175,17 +168,65 @@ def install_fzf() -> bool:
     return success
 
 
+def install_lazyvim() -> bool:
+    """Install LazyVim starter config if not already installed."""
+    if NVIM_DIR.exists():
+        logger.info("Neovim config already present, skipping LazyVim...")
+        return True
+
+    logger.info("Installing LazyVim starter...")
+    success, _ = run_command(
+        ['git', 'clone', 'https://github.com/LazyVim/starter', str(NVIM_DIR)],
+        "Failed to clone LazyVim starter"
+    )
+    if success:
+        shutil.rmtree(NVIM_DIR / '.git', ignore_errors=True)
+    return success
+
+
+def install_alacritty_theme() -> bool:
+    """Install the alacritty-theme collection if not already installed."""
+    if ALACRITTY_THEMES_DIR.exists():
+        logger.info("alacritty-theme already installed, skipping...")
+        return True
+
+    logger.info("Installing alacritty-theme...")
+    ALACRITTY_THEMES_DIR.parent.mkdir(parents=True, exist_ok=True)
+    success, _ = run_command(
+        ['git', 'clone', '--depth', '1',
+         'https://github.com/alacritty/alacritty-theme.git', str(ALACRITTY_THEMES_DIR)],
+        "Failed to install alacritty-theme"
+    )
+    return success
+
+
+def update_system() -> bool:
+    """Sync repos and fully upgrade the system before installing anything new.
+
+    Installing packages without a preceding full upgrade risks a partial
+    upgrade, a common source of broken dependencies on Arch.
+    """
+    logger.info("Updating system...")
+    if shutil.which('yay') is None:
+        cmd = ['sudo', 'pacman', '-Syu', '--noconfirm']
+    else:
+        cmd = ['yay', '-Syu', '--noconfirm']
+
+    success, _ = run_command(cmd, "Failed to update system")
+    return success
+
+
 def install_packages() -> bool:
-    """Install all required packages using paru."""
+    """Install all required packages using yay."""
     logger.info("Installing required packages...")
-    
-    # Check if paru is available
-    if shutil.which('paru') is None:
-        logger.warning("paru not found, trying with pacman...")
+
+    # Check if yay is available
+    if shutil.which('yay') is None:
+        logger.warning("yay not found, trying with pacman...")
         cmd = ['sudo', 'pacman', '-S', '--noconfirm', '--needed'] + PACKAGES
     else:
-        cmd = ['paru', '-S', '--noconfirm', '--needed'] + PACKAGES
-    
+        cmd = ['yay', '-S', '--noconfirm', '--needed'] + PACKAGES
+
     success, _ = run_command(cmd, "Failed to install packages")
     return success
 
@@ -197,10 +238,9 @@ def copy_config_files() -> bool:
     configs = [
         (INSTALL_DIR / 'zsh_powerlevel' / 'p10k.zsh', HOME_PATH / '.p10k.zsh'),
         (INSTALL_DIR / 'zsh_powerlevel' / 'zshrc', HOME_PATH / '.zshrc'),
-        (INSTALL_DIR / 'config' / 'kitty', CONFIG_DIR / 'kitty'),
-        (INSTALL_DIR / 'config' / 'alacritty.toml', HOME_PATH / '.alacritty.toml'),
-        (INSTALL_DIR / 'config' / 'tmux.conf', HOME_PATH / '.tmux.conf'),
-        (INSTALL_DIR / 'config' / 'nvim', CONFIG_DIR / 'nvim'),
+        (INSTALL_DIR / 'dircolors', HOME_PATH / '.dircolors'),
+        (INSTALL_DIR / 'config' / 'alacritty.toml', CONFIG_DIR / 'alacritty' / 'alacritty.toml'),
+        (INSTALL_DIR / 'config' / 'byobu', CONFIG_DIR / 'byobu'),
     ]
     
     try:
@@ -222,62 +262,37 @@ def copy_config_files() -> bool:
             
             # Copy new config
             logger.info(f"Copying {src.name} -> {dst}")
+            dst.parent.mkdir(parents=True, exist_ok=True)
             if src.is_dir():
                 shutil.copytree(src, dst, dirs_exist_ok=True)
             else:
                 shutil.copy2(src, dst)
         
         return True
-    except Exception as e:
+    except OSError as e:
         logger.error(f"Error copying config files: {e}")
         return False
 
 
-def install_fonts() -> bool:
-    """Install Hack fonts."""
-    logger.info("Installing fonts...")
-    
-    fonts_src = INSTALL_DIR / 'fonts'
-    fonts_dst = CONFIG_DIR / 'fonts'
-    hack_dir = fonts_dst / 'Hack'
-    
-    try:
-        if not fonts_src.exists():
-            logger.warning("Fonts directory not found, skipping...")
-            return True
-        
-        # Copy fonts directory
-        shutil.copytree(fonts_src, fonts_dst, dirs_exist_ok=True)
-        
-        # Unzip Hack fonts if zip exists
-        hack_zip = hack_dir / 'Hack.zip'
-        if hack_zip.exists():
-            logger.info("Extracting Hack fonts...")
-            success, _ = run_command(
-                ['unzip', '-o', str(hack_zip), '-d', str(hack_dir)],
-                "Failed to extract Hack fonts",
-                check=False
-            )
-            
-            # Refresh font cache
-            logger.info("Refreshing font cache...")
-            run_command(['fc-cache', '-fv'], "Failed to refresh font cache", check=False)
-        
-        return True
-    except Exception as e:
-        logger.error(f"Error installing fonts: {e}")
-        return False
+def refresh_font_cache() -> bool:
+    """Refresh the fontconfig cache after installing font packages."""
+    logger.info("Refreshing font cache...")
+    run_command(['fc-cache', '-fv'], "Failed to refresh font cache", check=False)
+    return True
 
 
 def prepare() -> bool:
     """Main preparation and installation function."""
     steps = [
+        ("Updating system", update_system),
         ("Installing packages", install_packages),
         ("Installing Oh My Zsh", install_oh_my_zsh),
         ("Installing fzf", install_fzf),
         ("Installing Powerlevel10k", install_powerlevel10k),
+        ("Installing LazyVim", install_lazyvim),
+        ("Installing alacritty-theme", install_alacritty_theme),
         ("Copying configuration files", copy_config_files),
-        ("Installing fonts", install_fonts),
+        ("Refreshing font cache", refresh_font_cache),
     ]
     
     for step_name, step_func in steps:
@@ -296,9 +311,9 @@ def display_system_info():
     """Display system and configuration information."""
     try:
         with open('/etc/os-release', 'r') as f:
-            os_info = [line.strip() for line in f.readlines() if 'PRETTY_NAME' in line][0]
+            os_info = next((line.strip() for line in f if 'PRETTY_NAME' in line), '')
             os_info = os_info.split('=')[1].strip('"')
-    except Exception:
+    except (OSError, IndexError):
         os_info = "Unknown"
     
     info = f"""
@@ -334,8 +349,8 @@ def main():
     
     # Confirm before proceeding
     try:
-        response = input("\n¿Continuar con la instalación? (y/N): ").strip().lower()
-        if response not in ['y', 'yes', 's', 'si', 'sí']:
+        response = input("\nContinue with installation? (y/N): ").strip().lower()
+        if response not in ['y', 'yes']:
             logger.info("Installation cancelled by user.")
             sys.exit(0)
     except KeyboardInterrupt:
@@ -369,7 +384,7 @@ if __name__ == "__main__":
         logger.info("\n\n✋ Installation interrupted by user.")
         logger.info("The SUN will be PRAISED anyway \\o/")
         sys.exit(130)
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001 - top-level safety net, must catch anything unexpected
         logger.error(f"\n💥 Unexpected error: {e}")
         sys.exit(1)
 

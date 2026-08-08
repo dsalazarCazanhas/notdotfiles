@@ -19,6 +19,8 @@ unsetopt SHARE_HISTORY
 plugins=(git sudo virtualenv zsh-autosuggestions zsh-syntax-highlighting)
 source "$ZSH/oh-my-zsh.sh"
 
+eval "$(fzf --zsh)"
+
 # --- Historial (Zsh real, no HISTCONTROL de bash) ---
 HISTFILE=$HOME/.zsh_history
 HISTSIZE=50000
@@ -30,6 +32,7 @@ setopt HIST_REDUCE_BLANKS
 setopt INC_APPEND_HISTORY
 
 # --- Variables de entorno ---
+export XDG_CONFIG_HOME="$HOME/.config"
 export EDITOR='nvim'
 export PAGER='most'
 export LIST='bat'
@@ -47,7 +50,7 @@ alias ll='lsd -alFh --group-directories-first'
 alias l='lsd'
 
 alias cat='bat'
-alias vim='lvim'
+alias vim='nvim'
 
 alias ports='sudo lsof -i -P -n'
 alias myIp='curl -s "https://api.ipify.org?format=json"'
