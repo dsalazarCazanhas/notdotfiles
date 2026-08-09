@@ -109,6 +109,72 @@ ex() {
   esac
 }
 
+opencode() {
+    docker compose \
+        -f "$HOME/Projects/opencode/docker-compose.yml" \
+        run --rm opencode "$@"
+}
+
+arch_update_status() {
+    local pacman_log="/var/log/pacman.log"
+    local cache_dir="${XDG_CACHE_HOME:-$HOME/.cache}"
+    local cache_file="$cache_dir/arch-update-status"
+    local cache_max_age=$((6 * 3600))
+
+    [[ -r "$pacman_log" ]] || return
+
+    mkdir -p "$cache_dir"
+
+    local now
+    now=$(date +%s)
+
+    local days=""
+
+    # Usar caché si todavía es reciente
+    if [[ -f "$cache_file" ]]; then
+        local cache_mtime
+        cache_mtime=$(stat -c %Y "$cache_file" 2>/dev/null)
+
+        if [[ -n "$cache_mtime" ]] &&
+           (( now - cache_mtime < cache_max_age )); then
+            days=$(<"$cache_file")
+        fi
+    fi
+
+    # Si no hay caché válido, consultar pacman.log
+    if [[ -z "$days" ]]; then
+        local last_update
+        last_update=$(
+            grep '\[ALPM\] upgraded ' "$pacman_log" |
+            tail -1 |
+            sed -E 's/^\[([^]]+)\].*/\1/'
+        )
+
+        [[ -z "$last_update" ]] && return
+
+        local last_epoch
+        last_epoch=$(date -d "$last_update" +%s 2>/dev/null) || return
+
+        days=$(( (now - last_epoch) / 86400 ))
+        print -r -- "$days" > "$cache_file"
+    fi
+    print "[arch-update] DEBUG: ${days} días desde la última actualización"
+    if (( days >= 14 )); then
+        print "ARCH: ${days} días sin actualizar. Haz un pacman -Syu pronto." \
+            | cowsay -f tux \
+            | lolcat
+
+    elif (( days >= 7 )); then
+        print "Arch lleva ${days} días sin actualizar." \
+            | cowsay \
+            | lolcat
+
+    elif (( days >= 5 )); then
+        print "  Arch: ${days} días desde la última actualización." \
+            | lolcat
+    fi
+}
+
 # p10k config al final
 [[ -f ~/.p10k.zsh ]] && source ~/.p10k.zsh
 
@@ -116,7 +182,6 @@ if [ -f ~/.dircolors ]; then
   eval "$(dircolors ~/.dircolors)"
 fi
 
-# This loads nvm bash_completion
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+
+
+arch_update_status
