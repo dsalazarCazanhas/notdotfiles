@@ -2,6 +2,7 @@
 
 import logging
 import os
+import pwd
 import shutil
 import subprocess
 import sys
@@ -79,14 +80,17 @@ def check_os() -> bool:
         return False
 
 
-def run_command(cmd: list[str], error_msg: str, check: bool = True) -> tuple[bool, str]:
+def run_command(
+    cmd: list[str], error_msg: str, check: bool = True, cwd: Path | None = None
+) -> tuple[bool, str]:
     """Execute a command and handle errors consistently."""
     try:
         result = subprocess.run(
             cmd,
             check=check,
             capture_output=True,
-            text=True
+            text=True,
+            cwd=cwd
         )
         return True, result.stdout
     except subprocess.CalledProcessError as e:
@@ -224,6 +228,44 @@ def install_alacritty_theme() -> bool:
     return success
 
 
+def install_yay() -> bool:
+    """Build and install the yay AUR helper if it isn't already present.
+
+    Needed on vanilla Arch (unlike EndeavourOS, it doesn't ship with an AUR
+    helper), since install_packages() relies on yay to pull AUR-only
+    packages like scrub and hw-probe.
+    """
+    if shutil.which('yay') is not None:
+        logger.info("yay already installed, skipping...")
+        return True
+
+    logger.info("Installing yay (AUR helper)...")
+    success, _ = run_command(
+        ['sudo', 'pacman', '-S', '--noconfirm', '--needed', 'base-devel', 'git'],
+        "Failed to install base-devel/git"
+    )
+    if not success:
+        return False
+
+    build_dir = HOME_PATH / '.cache' / 'yay-bin-install'
+    shutil.rmtree(build_dir, ignore_errors=True)
+
+    success, _ = run_command(
+        ['git', 'clone', '--depth', '1', 'https://aur.archlinux.org/yay-bin.git', str(build_dir)],
+        "Failed to clone yay-bin from the AUR"
+    )
+    if not success:
+        return False
+
+    success, _ = run_command(
+        ['makepkg', '-si', '--noconfirm'],
+        "Failed to build yay-bin",
+        cwd=build_dir
+    )
+    shutil.rmtree(build_dir, ignore_errors=True)
+    return success
+
+
 def update_system() -> bool:
     """Sync repos and fully upgrade the system before installing anything new.
 
@@ -305,10 +347,34 @@ def refresh_font_cache() -> bool:
     return True
 
 
+def set_default_shell() -> bool:
+    """Set zsh as the user's default login shell.
+
+    Oh My Zsh's --unattended install deliberately skips chsh, so this has
+    to happen explicitly or the user stays on their old shell.
+    """
+    zsh_path = shutil.which('zsh')
+    if zsh_path is None:
+        logger.warning("zsh not found, skipping shell change...")
+        return True
+
+    if pwd.getpwnam(CUR_USER).pw_shell == zsh_path:
+        logger.info("zsh is already the default shell, skipping...")
+        return True
+
+    logger.info("Setting zsh as the default shell...")
+    success, _ = run_command(
+        ['sudo', 'chsh', '-s', zsh_path, CUR_USER],
+        "Failed to set default shell"
+    )
+    return success
+
+
 def prepare() -> bool:
     """Main preparation and installation function."""
     steps = [
         ("Updating system", update_system),
+        ("Installing yay", install_yay),
         ("Installing packages", install_packages),
         ("Installing Oh My Zsh", install_oh_my_zsh),
         ("Installing zsh plugins", install_zsh_plugins),
@@ -318,6 +384,7 @@ def prepare() -> bool:
         ("Installing alacritty-theme", install_alacritty_theme),
         ("Copying configuration files", copy_config_files),
         ("Refreshing font cache", refresh_font_cache),
+        ("Setting default shell", set_default_shell),
     ]
     
     for step_name, step_func in steps:
