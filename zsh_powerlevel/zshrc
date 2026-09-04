@@ -158,7 +158,6 @@ arch_update_status() {
         days=$(( (now - last_epoch) / 86400 ))
         print -r -- "$days" > "$cache_file"
     fi
-    print "[arch-update] DEBUG: ${days} días desde la última actualización"
     if (( days >= 14 )); then
         print "ARCH: ${days} días sin actualizar. Haz un pacman -Syu pronto." \
             | cowsay -f tux \
@@ -185,3 +184,4 @@ fi
 
 
 arch_update_status
+eval "$(zoxide init zsh)"
