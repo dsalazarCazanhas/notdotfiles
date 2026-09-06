@@ -18,11 +18,10 @@ logger = logging.getLogger(__name__)
 
 # Constants
 PACKAGES = [
-    'zip', 'unzip', 'alacritty', 'dbus-glib', 'byobu', 'zsh',
-    'diffutils', 'util-linux', 'less', 'most', 'debugedit', 'fakeroot',
-    'gzip', 'binutils', 'bat', 'devtools', 'lsd', 'cowsay', 'toilet',
+    'zip', 'unzip', 'alacritty', 'byobu', 'zsh',
+    'less', 'most', 'bat', 'devtools', 'lsd', 'cowsay', 'toilet',
     'git', 'lolcat', 'ttf-hack-nerd', 'neovim', 'ripgrep', 'fd', 'lazygit',
-    'scrub', 'hw-probe'
+    'scrub', 'hw-probe', 'zoxide', 'base-devel', 'wl-clipboard'
 ]
 
 # Paths
