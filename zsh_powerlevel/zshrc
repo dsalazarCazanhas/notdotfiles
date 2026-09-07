@@ -73,6 +73,7 @@ alias hw='hwinfo --short'
 alias microcode='grep . /sys/devices/system/cpu/vulnerabilities/*'
 alias probe='sudo -E hw-probe -all -upload'
 alias sysfailed='systemctl list-units --failed'
+alias update='yay -Syu'
 alias shutdown='sudo shutdown now'
 alias reboot='sudo reboot now'
 
