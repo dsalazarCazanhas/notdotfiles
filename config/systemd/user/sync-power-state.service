@@ -1,0 +1,10 @@
+[Unit]
+Description=Synchronize power state at login
+After=graphical-session.target
+
+[Service]
+Type=oneshot
+ExecStart=%h/.local/bin/power-hook/sync-power-state.sh
+
+[Install]
+WantedBy=default.target
