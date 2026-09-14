@@ -48,6 +48,7 @@ alias ls='lsd --color=auto'
 alias la='lsd -a --group-directories-first'
 alias ll='lsd -alFh --group-directories-first'
 alias l='lsd'
+alias cd='z'
 
 alias cat='bat'
 alias vim='nvim'
@@ -182,7 +183,11 @@ if [ -f ~/.dircolors ]; then
   eval "$(dircolors ~/.dircolors)"
 fi
 
-
+if [ -d $HOME/.nvm ] ; then
+	export NVM_DIR="$HOME/.nvm"
+	[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+	[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+fi
 
 arch_update_status
 eval "$(zoxide init zsh)"
