@@ -60,7 +60,7 @@ HOME_PATH = Path.home()
 CONFIG_DIR = HOME_PATH / ".config"
 ZSH_DIR = HOME_PATH / ".oh-my-zsh"
 FZF_DIR = HOME_PATH / ".fzf"
-P10K_DIR = HOME_PATH / ".powerlevel10k"
+P10K_DIR = HOME_PATH / ".p10k.zsh"
 NVIM_DIR = CONFIG_DIR / "nvim"
 ALACRITTY_THEMES_DIR = CONFIG_DIR / "alacritty" / "themes"
 ZSH_PLUGINS_DIR = ZSH_DIR / "custom" / "plugins"
@@ -413,9 +413,15 @@ def set_default_shell() -> bool:
         logger.info("zsh is already the default shell, skipping...")
         return True
 
+    if shutil.grep("/etc/shells", zsh_path) is None:
+        logger.warning(
+            f"{zsh_path} not listed in /etc/shells, skipping shell change..."
+        )
+        return False
+
     logger.info("Setting zsh as the default shell...")
     success, _ = run_command(
-        ["sudo", "chsh", "-s", zsh_path, CUR_USER], "Failed to set default shell"
+        ["chsh", "-s", zsh_path, CUR_USER], "Failed to set default shell"
     )
     return success
 
