@@ -23,6 +23,7 @@ PACKAGES = [
     # Terminal / shell
     "alacritty",
     "byobu",
+    "zellij",
     "zsh",
     "zoxide",
     "fzf",
@@ -321,7 +322,7 @@ def already_updated_system() -> bool:
     """Warning to Sync repos and fully upgrade the system before installing anything new."""
     try:
         response = (
-            input("\nAre you fully upgraded your system already? (y/N): ")
+            input("\nHave you fully upgraded your system already? (y/N): ")
             .strip()
             .lower()
         )
@@ -532,8 +533,6 @@ if __name__ == "__main__":
         logger.info("\n\n✋ Installation interrupted by user.")
         logger.info("The SUN will be PRAISED anyway \\o/")
         sys.exit(130)
-    except (
-        Exception
-    ) as e:  # noqa: BLE001 - top-level safety net, must catch anything unexpected
+    except Exception as e:
         logger.error(f"\n💥 Unexpected error: {e}")
         sys.exit(1)
