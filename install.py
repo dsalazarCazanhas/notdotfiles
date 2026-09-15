@@ -176,10 +176,9 @@ def install_powerlevel10k() -> bool:
         [
             "git",
             "clone",
-            "--depth",
-            "1",
-            "https://github.com/romkatv/powerlevel10k.git",
-            str(P10K_DIR),
+            "--depth=1",
+            "https://gitee.com/romkatv/powerlevel10k.git",
+            str(ZSH_DIR / "custom/themes/powerlevel10k"),
         ],
         "Failed to install Powerlevel10k",
     )
